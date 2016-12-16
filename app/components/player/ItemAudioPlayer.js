@@ -63,11 +63,10 @@ export default class ItemPlayer extends Component {
     console.log(111111);
   }
   async dataAudio() {
-    console.log(22222);
     await AsyncStorage.getAllKeys((err, keys) => {
-      AsyncStorage.multiRemove(keys, (err) => {
-        console.log(err);
-      });
+      if(keys === 'dataAudio' || keys === 'hasAudio') {
+          AsyncStorage.multiRemove(keys);
+      }
     });
     await AsyncStorage.setItem("dataAudio", JSON.stringify(this.props.dataAudio));
     await AsyncStorage.setItem("hasAudio", JSON.stringify('false'));

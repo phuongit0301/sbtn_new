@@ -35,6 +35,7 @@ export default class AppView extends Component {
   }
 
   componentWillMount() {
+     AsyncStorage.removeItem('dataAudio');
      let checkAuthorization = AsyncStorage.getItem('authorization');
 
      let authorization = Authorization.generate();
@@ -82,7 +83,7 @@ export default class AppView extends Component {
 
   render() {
     var ChildCategoryID = 0;
-
+    
     switch(this.props.selectedMenuItem.name) {
       case 'HOME':
         var AppComponent = HomeView;
@@ -100,7 +101,23 @@ export default class AppView extends Component {
         var AppComponent = ListCategories;
         var MenuId = this.props.selectedMenuItem.id;
         break;
-
+      case 'ITEMS_CATEGORY':
+        var AppComponent = ListItemsCategory;
+        var MenuId = this.props.selectedMenuItem.id;
+        ChildCategoryID = this.props.selectedMenuItem.childCategoryID;
+        break;
+      case 'DETAILS':
+        var AppComponent = DetailsCategory;
+        var MenuId = this.props.selectedMenuItem.id;
+        break;
+      case 'SEARCH':
+        var AppComponent = Search;
+        var MenuId = null;
+        break;
+      case 'LOGIN':
+        var AppComponent = Login;
+        var MenuId = null;
+        break;
       default:
         var AppComponent = HomeView;
         var MenuId = this.props.selectedMenuItem.id;
@@ -113,13 +130,12 @@ export default class AppView extends Component {
         <AppComponent navigator={this.props.navigator}
                       onCategoryItemSelected={ this.props.onCategoryItemSelected }
                       selectedMenuId={MenuId}
-                      authorization={this.state.authorization}
                       childCategoryID={ChildCategoryID}
                       onMenuToogle={this.props.onMenuToogle}
           />
 
         {
-          this.state.hasAudio.toString() == 'true' ?
+          this.state.dataAudio ?
             <ItemAudioPlayerBottom authorization={this.state.authorization} dataAudio={this.state.dataAudio} hasAudio={this.state.hasAudio} navigator={this.props.navigator} />
           : null
 

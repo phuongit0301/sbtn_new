@@ -66,6 +66,7 @@ export default class ListCategories extends Component {
     try {
       let categoriesId = selectedMenuId ? selectedMenuId : this.props.selectedMenuId;
       let url = REQUEST_URL_LIST_CATEGORIES + '?category_id=' + categoriesId;
+      console.log(url);
       let response = await fetch(url, {
                                   method: 'GET',
                                   headers: {
@@ -74,6 +75,7 @@ export default class ListCategories extends Component {
                                   }
                                 });
       let responseJson = await response.json();
+      console.log(responseJson);
       this.setState({
         dataListCategories: this.state.dataListCategories.cloneWithRows(responseJson.groups),
         loaded: !this.state.loaded,
@@ -112,8 +114,10 @@ export default class ListCategories extends Component {
   }
 
   async jumpBack() {
+    console.log(this.props);
+    console.log(this.state);
     //let dataAudio = await AsyncStorage.getItem('dataAudio');
-    AsyncStorage.setItem('hasAudio', JSON.stringify('true'));
+    //AsyncStorage.setItem('hasAudio', JSON.stringify('true'));
     //dataRadio = JSON.parse(dataRadio);
     // this.setState({
     //   dataRadio: dataRadio

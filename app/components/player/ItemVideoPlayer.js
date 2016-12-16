@@ -75,6 +75,15 @@ export default class VideoPlayer extends Component {
          paused: true
        });
     });
+    this.dataAudio().done();
+  }
+  
+  async dataAudio() {
+    await AsyncStorage.getAllKeys((err, keys) => {
+      if(keys === 'dataAudio' || keys === 'hasAudio') {
+          AsyncStorage.multiRemove(keys);
+      }
+    });
   }
 
   // componentDidUpdate(prevProps, prevState) {
