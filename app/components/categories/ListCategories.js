@@ -36,9 +36,8 @@ export default class ListCategories extends Component {
       imageSize: null,
       containerImageSize: null,
       categoryID: null,
-      hasRadio: false,
-      moreShow: false,
-      authorization: {}
+      authorization: {},
+      items: []
     }
   }
 
@@ -50,9 +49,10 @@ export default class ListCategories extends Component {
     let authorization = await AsyncStorage.getItem('authorizationGet');
 
     this._fetchData(JSON.parse(authorization)).done();
-
+console.log(this.props);
     this.setState({
-      authorization: JSON.parse(authorization)
+      authorization: JSON.parse(authorization),
+      items: this.props.route.passProps.items.length > 0 ? this.props.route.passProps.items : []
     })
   }
 
@@ -66,7 +66,6 @@ export default class ListCategories extends Component {
     try {
       let categoriesId = selectedMenuId ? selectedMenuId : this.props.selectedMenuId;
       let url = REQUEST_URL_LIST_CATEGORIES + '?category_id=' + categoriesId;
-      console.log(url);
       let response = await fetch(url, {
                                   method: 'GET',
                                   headers: {
@@ -75,7 +74,7 @@ export default class ListCategories extends Component {
                                   }
                                 });
       let responseJson = await response.json();
-      console.log(responseJson);
+
       this.setState({
         dataListCategories: this.state.dataListCategories.cloneWithRows(responseJson.groups),
         loaded: !this.state.loaded,
@@ -114,8 +113,6 @@ export default class ListCategories extends Component {
   }
 
   async jumpBack() {
-    console.log(this.props);
-    console.log(this.state);
     //let dataAudio = await AsyncStorage.getItem('dataAudio');
     //AsyncStorage.setItem('hasAudio', JSON.stringify('true'));
     //dataRadio = JSON.parse(dataRadio);
@@ -173,13 +170,12 @@ export default class ListCategories extends Component {
 
   bindMoreItem(id, items) {
 
-    //console.log(this.props);
     this.props.navigator.push({
                                 id: this.props.selectedMenuId,
-                                title: 'ROWLISTITEMCATEGORY',
-                                component: RowListItemCategory,
+                                name: 'CATEGORIES',
+                                component: ListCategories,
                                 childCategoryID: id,
-                                moreItemsData: items,
+                                passProps: {items: items},
                                 navigationBar: <NavigationBar title={this.renderLogoNavBar()}
                                                   statusBar = {{ hidden: true }}
                                                   leftButton = { this.renderBackButton() }
@@ -212,6 +208,7 @@ export default class ListCategories extends Component {
                     <TouchableOpacity onPress = { () => this.props.navigator.push({
                                                 id: data.id,
                                                 component: DetailsCategory,
+                                                passProps: {items: []},
                                                 navigationBar: <NavigationBar title={this.renderLogoNavBar()}
                                                                   statusBar = {{ hidden: true }}
                                                                   leftButton = { this.renderBackButton() }
@@ -234,15 +231,55 @@ export default class ListCategories extends Component {
     )
   }
 
+  renderMoreItems() {
+    return (
+      <View style={[styles.column, styles.container]}>
+          <View style={[styles.sectionHeader, styles.row]}>
+              <Text style={styles.sectionText}>{this.props.name}</Text>
+          </View>
+
+          <View style={[styles.row, styles.blocks]}>
+            {
+              this.props.items.map((data, index) => {
+                return(
+                  <View key={index} style={{width: width/2, height: ((width/2)/16*9) + 20}}>
+                    <TouchableOpacity onPress = { () => this.props.navigator.push({
+                                                                                    id: data.id,
+                                                                                    component: DetailsCategory,
+                                                                                    navigationBar: <NavigationBar title={this.renderLogoNavBar()}
+                                                                                                      statusBar = {{ hidden: true }}
+                                                                                                      leftButton = { this.renderBackButton() }
+                                                                                                      style={styles.navigationBar}
+                                                                                                      rightButton = { this.renderNavIconSearch() } />
+                                                                                  })}>
+                      <View style={[styles.thumbnailContainer, styles.column]}>
+                        <Image source={{uri: data.image}} style={{width: width/2, height: ((width/2)/16*9)}} />
+                        <View style={styles.titleContainer}>
+                          <Text style={styles.title} ellipsizeMode='tail' numberOfLines={1}>{data.name}</Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                )
+              })
+            }
+          </View>
+      </View>
+    );
+  }
+
   render() {
     return(
       <View style={styles.container}>
-
-          <ListView
-            dataSource = {this.state.dataListCategories}
-            renderRow = {this.renderRowItem.bind(this)}
-          />
-
+          {
+            this.state.items.length > 0  ?
+              this.renderMoreItems(this.state.items)
+            :
+              <ListView
+                dataSource = {this.state.dataListCategories}
+                renderRow = {this.renderRowItem.bind(this)}
+              />
+          }
       </View>
    );
   }

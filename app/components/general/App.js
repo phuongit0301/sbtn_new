@@ -83,7 +83,7 @@ export default class AppView extends Component {
 
   render() {
     var ChildCategoryID = 0;
-    
+
     switch(this.props.selectedMenuItem.name) {
       case 'HOME':
         var AppComponent = HomeView;
@@ -132,11 +132,17 @@ export default class AppView extends Component {
                       selectedMenuId={MenuId}
                       childCategoryID={ChildCategoryID}
                       onMenuToogle={this.props.onMenuToogle}
+                      {...this.props}
           />
-
+        
         {
           this.state.dataAudio ?
-            <ItemAudioPlayerBottom authorization={this.state.authorization} dataAudio={this.state.dataAudio} hasAudio={this.state.hasAudio} navigator={this.props.navigator} />
+            <ItemAudioPlayerBottom
+              authorization={this.state.authorization}
+              dataAudio={this.state.dataAudio}
+              hasAudio={this.state.hasAudio}
+              navigator={this.props.navigator}
+            />
           : null
 
         }

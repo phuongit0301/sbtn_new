@@ -97,7 +97,7 @@ export default class NavigatorView extends Component {
 
   renderScene(route, navigator) {
     let Component = route.component;
-    
+
     let navBar = route.navigationBar;
     if (navBar) {
       navBar = React.cloneElement(navBar, {
@@ -118,6 +118,7 @@ export default class NavigatorView extends Component {
       <Navigator
         initialRoute = {{
           component: AppView,
+          passProps: {items: []},
           navigationBar: <NavigationBar
                 style = {styles.navigationBar}
                 title = {this.renderLogoNavBar()}

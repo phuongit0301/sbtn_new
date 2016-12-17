@@ -72,7 +72,7 @@ export default class RowListItemCategory extends Component {
 
           <View style={[styles.row, styles.blocks]}>
             {
-              this.props.route.moreItemsData.map((data, index) => {
+              this.props.items.map((data, index) => {
                 return(
                   <View key={index} style={{width: width/2, height: ((width/2)/16*9) + 20}}>
                     <TouchableHighlight onPress = { () => this.props.navigator.push({

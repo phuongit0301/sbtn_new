@@ -1,5 +1,15 @@
 import React, {Component} from 'react';
-import { View, Text, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Dimensions, AppState, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableHighlight,
+  TouchableOpacity,
+  Dimensions,
+  AppState,
+  ActivityIndicator,
+  AsyncStorage
+} from 'react-native';
 import styles from '../../styles/Style';
 import Video from 'react-native-video';
 import { Icon } from 'react-native-elements';
@@ -77,7 +87,7 @@ export default class VideoPlayer extends Component {
     });
     this.dataAudio().done();
   }
-  
+
   async dataAudio() {
     await AsyncStorage.getAllKeys((err, keys) => {
       if(keys === 'dataAudio' || keys === 'hasAudio') {

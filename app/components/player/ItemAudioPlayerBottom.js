@@ -1,5 +1,16 @@
 import React, {Component} from 'react';
-import { View, Text, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Dimensions, ActivityIndicator, Animated, Easing, AsyncStorage } from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  TouchableHighlight,
+  TouchableOpacity,
+  Dimensions,
+  ActivityIndicator,
+  Animated,
+  Easing,
+  AsyncStorage
+} from 'react-native';
 import styles from '../../styles/Style';
 import Video from 'react-native-video';
 
@@ -99,8 +110,10 @@ export default class ItemAudioPlayerBottom extends Component {
 
     this.setState({
       paused: !this.state.paused,
-      hasAudio: false
+      dataAudio: null
     });
+
+    AsyncStorage.removeItem('dataAudio');
   }
 
   render() {
