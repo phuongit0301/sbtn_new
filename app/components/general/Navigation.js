@@ -34,6 +34,7 @@ export default class NavigatorView extends Component {
 
   static propsType = {
     onMenuToogle: React.PropTypes.func.isRequired,
+    onAudio: React.PropTypes.func.isRequired,
     selectedItem: React.PropTypes.object.isRequired,
     onCategoryItemSelected: React.PropTypes.func.isRequired,
   }
@@ -108,7 +109,12 @@ export default class NavigatorView extends Component {
     return (
       <View style = {styles.navigator}>
         {navBar}
-        <Component navigator={navigator} {...route.passProps} route={route} selectedMenuItem = { this.props.selectedItem } onCategoryItemSelected = { this.props.onCategoryItemSelected } onMenuToogle={this.props.onMenuToogle}/>
+        <Component navigator={navigator} {...route.passProps} route={route}
+        selectedMenuItem = { this.props.selectedItem }
+        onCategoryItemSelected = { this.props.onCategoryItemSelected }
+        onMenuToogle={this.props.onMenuToogle}
+        onAudio={this.props.onAudio}
+        />
       </View>
     );
   }
@@ -118,7 +124,7 @@ export default class NavigatorView extends Component {
       <Navigator
         initialRoute = {{
           component: AppView,
-          passProps: {items: []},
+          passProps: {items: [], name: ''},
           navigationBar: <NavigationBar
                 style = {styles.navigationBar}
                 title = {this.renderLogoNavBar()}

@@ -6,6 +6,11 @@ import {
   AsyncStorage,
   View
 } from 'react-native';
+import FBSDK from 'react-native-fbsdk';
+const {
+  LoginManager,
+  AccessToken
+} = FBSDK;
 
 import styles from '../../styles/Style';
 
@@ -19,6 +24,7 @@ export default class LogoutButton extends Component {
   }
 
   logout(){
+    LoginManager.logOut();
     AsyncStorage.removeItem('userData').then(() => {
       this.setState({loaded: false});
       this.props.onItemSelected({name: 'HOME'});

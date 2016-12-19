@@ -578,7 +578,7 @@ export default StyleSheet.create({
     marginBottom: 5
   },
   containerAudioBottom: {
-    position: 'relative',
+    position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,

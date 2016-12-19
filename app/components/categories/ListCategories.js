@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, ListView, ScrollView, Dimensions, AsyncStorage, TouchableOpacity, Image } from 'react-native';
+import { Text, View, StyleSheet, ListView, ScrollView, Dimensions, AsyncStorage, TouchableOpacity, Image, BackAndroid } from 'react-native';
 
 import Row from './RowListCategories';
 import DetailsCategory from './DetailsCategory';
@@ -23,6 +23,7 @@ export default class ListCategories extends Component {
 
   static propsType = {
     onCategoryItemSelected: React.PropTypes.func.isRequired,
+    onAudio: React.PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -49,10 +50,9 @@ export default class ListCategories extends Component {
     let authorization = await AsyncStorage.getItem('authorizationGet');
 
     this._fetchData(JSON.parse(authorization)).done();
-console.log(this.props);
     this.setState({
       authorization: JSON.parse(authorization),
-      items: this.props.route.passProps.items.length > 0 ? this.props.route.passProps.items : []
+      //items: this.props.route.passProps.items.length > 0 ? this.props.route.passProps.items : []
     })
   }
 
@@ -99,7 +99,8 @@ console.log(this.props);
       </TouchableOpacity>
     )
   }
-  renderBackButton() {
+
+  renderMoreBackButton() {
     return(
       <View style={styles.iconBack}>
         <Icon
@@ -107,18 +108,32 @@ console.log(this.props);
           type='font-awesome'
           color='#fff'
           size={30}
-          onPress={() => this.jumpBack().done()} />
+          onPress={() => this.props.navigator.jumpBack()} />
       </View>
     )
   }
 
-  async jumpBack() {
+  renderBackButton(mode) {
+    return(
+      <View style={styles.iconBack}>
+        <Icon
+          name='angle-left'
+          type='font-awesome'
+          color='#fff'
+          size={30}
+          onPress={() => this.jumpBack(mode)} />
+      </View>
+    )
+  }
+
+  jumpBack(mode) {
     //let dataAudio = await AsyncStorage.getItem('dataAudio');
     //AsyncStorage.setItem('hasAudio', JSON.stringify('true'));
     //dataRadio = JSON.parse(dataRadio);
     // this.setState({
     //   dataRadio: dataRadio
     // })
+    (mode == 0) ? this.props.onAudio(true) : this.props.onAudio(false);
     this.props.navigator.jumpBack();
   }
 
@@ -151,34 +166,31 @@ console.log(this.props);
       })
   }
 
-  // bindOnDetail(id, mode) {
-  //
-  //   this.setState({
-  //     hasRadio: false
-  //   })
-  //
-  //   this.props.navigator.push({
-  //                               id: id,
-  //                               component: DetailsCategory,
-  //                               navigationBar: <NavigationBar title={this.renderLogoNavBar()}
-  //                                                 statusBar = {{ hidden: true }}
-  //                                                 leftButton = { this.renderBackButton(id, mode) }
-  //                                                 style={styles.navigationBar}
-  //                                                 rightButton = { this.renderNavIconSearch(mode) } />
-  //                             })
-  // }
+  bindOnDetail(id, mode) {
 
-  bindMoreItem(id, items) {
+    this.props.onAudio(false);
 
     this.props.navigator.push({
-                                id: this.props.selectedMenuId,
-                                name: 'CATEGORIES',
-                                component: ListCategories,
-                                childCategoryID: id,
-                                passProps: {items: items},
+                                id: id,
+                                component: DetailsCategory,
                                 navigationBar: <NavigationBar title={this.renderLogoNavBar()}
                                                   statusBar = {{ hidden: true }}
-                                                  leftButton = { this.renderBackButton() }
+                                                  leftButton = { this.renderBackButton(mode) }
+                                                  style={styles.navigationBar}
+                                                  rightButton = { this.renderNavIconSearch() } />
+                              })
+  }
+
+  bindMoreItem(id, items) {
+    this.props.navigator.push({
+                                id: this.props.selectedMenuId,
+                                passProps: { selectedMenuItem: {name: 'ITEMCATEGORY'} },
+                                component: RowListItemCategory,
+                                childCategoryID: id,
+                                items: items,
+                                navigationBar: <NavigationBar title={this.renderLogoNavBar()}
+                                                  statusBar = {{ hidden: true }}
+                                                  leftButton = { this.renderMoreBackButton() }
                                                   style={styles.navigationBar}
                                                   rightButton = { this.renderNavIconSearch() } />
                               });
@@ -205,16 +217,7 @@ console.log(this.props);
                 const visibility = index > 5 ? styles.hidden : { width: imageWidth, height: imageHeight + 20};
                 return(
                   <View key={this.props.id + '_' + index} style={visibility}>
-                    <TouchableOpacity onPress = { () => this.props.navigator.push({
-                                                id: data.id,
-                                                component: DetailsCategory,
-                                                passProps: {items: []},
-                                                navigationBar: <NavigationBar title={this.renderLogoNavBar()}
-                                                                  statusBar = {{ hidden: true }}
-                                                                  leftButton = { this.renderBackButton() }
-                                                                  style={styles.navigationBar}
-                                                                  rightButton = { this.renderNavIconSearch(rowData.mode) } />
-                                              }) }>
+                    <TouchableOpacity onPress = { () => this.bindOnDetail(data.id, rowData.mode) }>
                       <View style={[styles.thumbnailContainer, styles.column]}>
                         <Image source={{uri: data.image}} style={{ width: imageWidth, height: imageHeight }} />
                         <View style={styles.titleContainer}>
@@ -271,15 +274,10 @@ console.log(this.props);
   render() {
     return(
       <View style={styles.container}>
-          {
-            this.state.items.length > 0  ?
-              this.renderMoreItems(this.state.items)
-            :
-              <ListView
-                dataSource = {this.state.dataListCategories}
-                renderRow = {this.renderRowItem.bind(this)}
-              />
-          }
+          <ListView
+            dataSource = {this.state.dataListCategories}
+            renderRow = {this.renderRowItem.bind(this)}
+          />
       </View>
    );
   }

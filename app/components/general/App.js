@@ -71,19 +71,9 @@ export default class AppView extends Component {
     })
   }
 
-  checkBool(hasAudio) {
-    if(hasAudio == true) {
-      return true;
-    } else if(hasAudio == 'true') {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   render() {
     var ChildCategoryID = 0;
-
+//console.log(this.props);
     switch(this.props.selectedMenuItem.name) {
       case 'HOME':
         var AppComponent = HomeView;
@@ -124,7 +114,6 @@ export default class AppView extends Component {
         break;
     }
 
-    //let hasAudio = this.checkBool();
     return(
       <View style={styles.container}>
         <AppComponent navigator={this.props.navigator}
@@ -134,18 +123,6 @@ export default class AppView extends Component {
                       onMenuToogle={this.props.onMenuToogle}
                       {...this.props}
           />
-        
-        {
-          this.state.dataAudio ?
-            <ItemAudioPlayerBottom
-              authorization={this.state.authorization}
-              dataAudio={this.state.dataAudio}
-              hasAudio={this.state.hasAudio}
-              navigator={this.props.navigator}
-            />
-          : null
-
-        }
       </View>
     );
   }

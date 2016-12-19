@@ -122,7 +122,7 @@ export default class ItemAudioPlayerBottom extends Component {
         this.state.dataAudio ?
             <View style={[styles.containerAudioBottom, styles.timelinesSectionHeaderBgColor]}>
               <View style={styles.row}>
-                 <Video source={{uri: 'http://s82.stream.nixcdn.com/6f006f16b7b7c00f8664c9478894df1c/584fa983/NhacCuaTui929/PhiaSauMotCoGai-SoobinHoangSon-4632323.mp3'}} // Looks for .mp4 file (background.mp4) in the given expansion version.
+                 <Video source={{uri: 'http://s82.stream.nixcdn.com/42eb1f35aaebd943d804878540d05a90/5857ae73/NhacCuaTui929/PhiaSauMotCoGai-SoobinHoangSon-4632323.mp3'}} // Looks for .mp4 file (background.mp4) in the given expansion version.
                     ref={(ref) => {
                       this.player = ref
                     }}                             // Store reference

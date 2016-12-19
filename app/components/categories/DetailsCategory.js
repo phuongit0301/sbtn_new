@@ -47,7 +47,6 @@ export default class DetailsCategory extends Component {
   async _generateAuthorization(url) {
     try {
       let authorization = await AsyncStorage.getItem('authorizationGet');
-      console.log(authorization);
 
       this._fetchData(JSON.parse(authorization)).done();
 

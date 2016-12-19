@@ -18,8 +18,8 @@ import validateEmail from '../../validates/Validation';
 import HomeView from '../home/Index';
 import SignUp from './SignUp';
 import LoginFB from './LoginFB';
+import FBLoginButton from '../views/FBLoginButton';
 import Authorization from '../../config/Authorization';
-
 import styles from '../../styles/Style';
 import constants from '../../constants/Types';
 const {
@@ -32,6 +32,7 @@ export default class Login extends Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       email: '',
       password: '',
@@ -241,17 +242,7 @@ export default class Login extends Component {
           <View>
             <View style={styles.row}>
               <Button title='Login' onPress={() => this.checkLogin().done()} />
-              <Button title='Login by facebook'
-                      onPress={() => this.props.navigator.push({
-                                    id: null,
-                                    component: LoginFB,
-                                    navigationBar: <NavigationBar
-                                                      statusBar = {{ hidden: true }}
-                                                      leftButton = { this.renderBackButton() }
-                                                      style={styles.navigationBar}
-                                                      />
-
-              })} />
+              <FBLoginButton navigator={this.props.navigator} />
             </View>
           </View>
 

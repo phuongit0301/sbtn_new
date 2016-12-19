@@ -12,16 +12,29 @@ import NavigationBar from 'react-native-navbar';
 const defaultAvatar = 'http://static.onworldtv.com/themes/front/images/bg/avatar_full.jpg';
 const defaultName = 'Guest';
 
+import FBSDK from 'react-native-fbsdk';
+const {
+  AccessToken
+} = FBSDK;
+
 export default class MenuUserView extends Component {
 
   constructor(props) {
       super(props);
       this.state = {
-        loaded: false
+        loaded: false,
+        isFBLogin: false
       }
   }
 
-  componentDidUpdate() {
+  componentWillReceiveProps(nextProps) {
+    AccessToken.getCurrentAccessToken().then(
+      (data) => {
+        this.setState({
+          isFBLogin: data != null ? true : false
+        })
+      }
+    );
     this.setUserData().done();
   }
 
@@ -47,9 +60,8 @@ export default class MenuUserView extends Component {
          <View style = {styles.menuUserName}>
            <Text style = {styles.menuUserNameText}>{name}</Text>
          </View>
-
          {
-           this.state.userData ?
+           (this.state.userData || this.state.isFBLogin) ?
               <LogoutButton onItemSelected={this.props.onItemSelected} />
             :
               <LoginButton onItemSelected={this.props.onItemSelected} onMenuToogle={this.props.onMenuToogle} />
@@ -57,7 +69,7 @@ export default class MenuUserView extends Component {
        </View>
 
          {
-           this.state.userData ?
+           (this.state.userData || this.state.isFBLogin) ?
                 <View>
                     <PurchasedContentButton onItemSelected={this.props.onItemSelected} />
                     <PurchasedPackageButton onItemSelected={this.props.onItemSelected} />
