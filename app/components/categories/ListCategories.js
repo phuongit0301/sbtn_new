@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, ListView, ScrollView, Dimensions, AsyncStorage, TouchableOpacity, Image, BackAndroid } from 'react-native';
+import { Text, View, StyleSheet, ListView, ScrollView, Dimensions, AsyncStorage, TouchableOpacity, Image, BackAndroid, ActivityIndicator } from 'react-native';
 
 import Row from './RowListCategories';
 import DetailsCategory from './DetailsCategory';
@@ -12,6 +12,8 @@ import styles from '../../styles/Style';
 const { width, height } = Dimensions.get('window');
 const imageWidth = (width/2) - 5;
 const imageHeight = (width/2)/16*9;
+const imageWidthAudio = (width/3) - 5;
+const imageHeightAudio = (width/3)/16*9;
 
 import constants from '../../constants/Types';
 const {
@@ -38,7 +40,8 @@ export default class ListCategories extends Component {
       containerImageSize: null,
       categoryID: null,
       authorization: {},
-      items: []
+      items: [],
+      imageLoading: true,
     }
   }
 
@@ -170,6 +173,22 @@ export default class ListCategories extends Component {
 
     this.props.onAudio(false);
 
+    mode == 0 ? this.bindOnDetailAudio(id, mode) : this.bindOnDetailVideo(id, mode);
+  }
+
+  bindOnDetailAudio(id, mode) {
+    this.props.navigator.push({
+                                id: id,
+                                component: DetailsCategory,
+                                navigationBar: <NavigationBar title={this.renderLogoNavBar()}
+                                                  statusBar = {{ hidden: true }}
+                                                  leftButton = { this.renderBackButton(mode) }
+                                                  style={styles.navigationBarAudio}
+                                                />
+                              });
+  }
+
+  bindOnDetailVideo(id, mode) {
     this.props.navigator.push({
                                 id: id,
                                 component: DetailsCategory,
@@ -177,8 +196,8 @@ export default class ListCategories extends Component {
                                                   statusBar = {{ hidden: true }}
                                                   leftButton = { this.renderBackButton(mode) }
                                                   style={styles.navigationBar}
-                                                  rightButton = { this.renderNavIconSearch() } />
-                              })
+                                                  />
+                              });
   }
 
   bindMoreItem(id, items) {
@@ -197,8 +216,8 @@ export default class ListCategories extends Component {
 
   }
 
-  renderRowItem(rowData) {
-    return (
+  renderRowItemVideo(rowData) {
+    return(
       <View style={styles.container}>
           <View style={[styles.sectionHeader]}>
               <Text style={styles.sectionText}>{rowData.name}</Text>
@@ -231,6 +250,57 @@ export default class ListCategories extends Component {
             }
           </View>
       </View>
+    )
+  }
+
+  renderRowItemAudio(rowData) {
+    return(
+      <View style={styles.container}>
+          <View style={[styles.sectionHeader]}>
+              <Text style={styles.sectionText}>{rowData.name}</Text>
+            {
+              rowData.items.length > 6 ?
+                <TouchableOpacity style={styles.textRight} onPress = { () => this.bindMoreItem(rowData.id, rowData.items) }>
+                    <Text style={styles.btnMore}>More</Text>
+                </TouchableOpacity>
+              : null
+            }
+          </View>
+
+          <View style={[styles.blocks]}>
+            {
+              rowData.items.map((data, index) => {
+                const visibility = index > 5 ? styles.hidden : { width: imageWidthAudio, height: imageWidthAudio + 20};
+                return(
+                  <View key={this.props.id + '_' + index} style={visibility}>
+                    <TouchableOpacity onPress = { () => this.bindOnDetail(data.id, rowData.mode) }>
+                      <View style={[styles.thumbnailContainer, styles.column]}>
+                        <Image source={{uri: data.image}}
+                                style={[styles.centering, { width: imageWidthAudio, height: imageWidthAudio }]}
+                                onLoadEnd={(e) => this.setState({imageLoading: false})}
+                        >
+                          <ActivityIndicator animating={this.state.imageLoading} size="small" />
+                        </Image>
+                        <View style={styles.titleContainer}>
+                          <Text style={styles.title} ellipsizeMode='tail' numberOfLines={1}>{data.name}</Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                )
+              })
+            }
+          </View>
+      </View>
+    )
+  }
+
+  renderRowItem(rowData) {
+    return (
+      rowData.mode == 0 ?
+        this.renderRowItemAudio(rowData)
+      :
+        this.renderRowItemVideo(rowData)
     )
   }
 

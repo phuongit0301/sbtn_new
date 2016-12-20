@@ -16,11 +16,11 @@ export default class FBLoginButton extends Component {
     this.state = {
       isLogin: false
     }
+    this.redirectToHomePage = this.redirectToHomePage.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log(this.state.isLogin);
-    this.props.navigator.popToTop();
+  redirectToHomePage() {
+    return this.props.navigator.pop();
   }
 
   render() {
@@ -36,10 +36,10 @@ export default class FBLoginButton extends Component {
                 console.log("Login was cancelled");
               } else {
                 alert("Login was successful");
-
                 this.setState({
                     isLogin: true
                 })
+                this.redirectToHomePage();
               }
             }
           }

@@ -14,7 +14,6 @@ import {
 } from 'react-native';
 
 import ImageSlider from 'react-native-image-slider';
-import Row from './Row';
 import ListItem from './ListItem';
 import Slider from '../general/Slider';
 import styles from '../../styles/Style';
@@ -82,7 +81,7 @@ export default class HomeView extends Component {
                                 });
       let responseData = await response.json();
 
-      
+
       this.setState({
         listImageSlide: responseData.banners || [],
         listDataView: responseData.view || [],

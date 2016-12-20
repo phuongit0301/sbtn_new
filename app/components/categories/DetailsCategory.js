@@ -89,7 +89,7 @@ export default class DetailsCategory extends Component {
   render() {
     return(
         this.state.loaded ?
-            <ItemPlayer navigator={this.props.navigator} dataVideo={this.state.dataVideo} dataRelate={this.state.dataRelate} />
+            <ItemPlayer navigator={this.props.navigator} dataVideo={this.state.dataVideo} dataRelate={this.state.dataRelate} onAudio={this.props.onAudio} />
         :
         <ActivityIndicator
           style={[styles.waiting]}

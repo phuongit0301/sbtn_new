@@ -140,7 +140,7 @@ export default class VideoPlayer extends Component {
     let backgroundVideo = this.state.resizeMode === 'contain' ? styles.backgroundVideo : styles.backgroundVideoFull;
     let backgroundHeightVideo = this.state.resizeMode === 'contain' ? {height: width/16*9} : {height: height};
     const selectedTab = this.state.selectedTab;
-
+console.log(123123123);
     return (
       <View style={styles.containerVideo}>
         <View style={[backgroundVideo, backgroundHeightVideo]}>

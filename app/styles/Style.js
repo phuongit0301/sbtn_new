@@ -134,7 +134,7 @@ export default StyleSheet.create({
     marginLeft: 5
   },
   navigator: {
-    flex: 1,
+    flex: 1
   },
   navigationBar: {
     backgroundColor: '#45cbe2',
@@ -145,6 +145,11 @@ export default StyleSheet.create({
   logo: {
     color: '#FFFFFF',
     fontSize: 24
+  },
+  logoAudio: {
+    color: '#FFFFFF',
+    fontSize: 24,
+    textAlign: 'center'
   },
   iconSearch: {
     marginTop: 15,
@@ -286,6 +291,25 @@ export default StyleSheet.create({
     bottom: 0,
     right: 0,
   },
+  backgroundAudioFull: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    zIndex: -1,
+  },
+  navigationBarAudio: {
+    position: 'absolute',
+    zIndex: 5,
+    top: 0,
+    left: 0,
+    right: 0,
+    padding: 10,
+    backgroundColor: 'transparent',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start'
+  },
   playerContainer: {
     position: 'absolute',
     bottom: 0,
@@ -388,6 +412,7 @@ export default StyleSheet.create({
     borderColor: '#FFFFFF',
     borderRadius: 1,
     padding: 1,
+    backgroundColor: 'transparent'
   },
   isLiveText: {
     fontSize: 8,
@@ -575,7 +600,8 @@ export default StyleSheet.create({
     justifyContent: 'center'
   },
   rowBottom: {
-    marginBottom: 5
+    marginBottom: 5,
+    backgroundColor: 'transparent'
   },
   containerAudioBottom: {
     position: 'absolute',
@@ -644,5 +670,8 @@ export default StyleSheet.create({
   },
   textinput: {
     height: 20
+  },
+  logoNavBarAudio: {
+    flex: 1
   }
 })

@@ -11,7 +11,7 @@ export default class ItemPlayer extends Component {
   render() {
     return (
         this.props.dataVideo.mode == 0 ?
-          <ItemAudioPlayer dataAudio={this.props.dataVideo} navigator={this.props.navigator} />
+          <ItemAudioPlayer dataAudio={this.props.dataVideo} navigator={this.props.navigator} onAudio={this.props.onAudio} />
         :
           <ItemVideoPlayer dataVideo={this.props.dataVideo} dataRelate={this.props.dataRelate} navigator={this.props.navigator} />
     )
