@@ -36,6 +36,7 @@ export default class FBLoginButton extends Component {
                 console.log("Login was cancelled");
               } else {
                 alert("Login was successful");
+
                 this.setState({
                     isLogin: true
                 })

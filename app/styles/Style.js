@@ -53,10 +53,11 @@ export default StyleSheet.create({
     padding: 5,
     flexDirection: 'column',
     flexWrap: 'wrap',
-    backgroundColor: '#333',
+    backgroundColor: '#333'
   },
   menuUserInfoView: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   menuUserAvatar: {
     justifyContent: 'center',
@@ -113,14 +114,15 @@ export default StyleSheet.create({
   NavIconMenu: {
     padding: 10
   },
-  containerJustifyCenter: {
-    justifyContent: 'center',
-  },
   loginButton: {
     marginRight: 5,
     backgroundColor: '#45cbe2',
-    padding: 3,
-    borderRadius: 5
+    paddingTop: 1,
+    paddingBottom: 1,
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderRadius: 3,
+    height: 20,
   },
   white: {
     color: '#FFFFFF'
@@ -295,16 +297,11 @@ export default StyleSheet.create({
     position: 'absolute',
     top: 0,
     left: 0,
-    bottom: 0,
     right: 0,
+    bottom: 0,
     zIndex: -1,
   },
   navigationBarAudio: {
-    position: 'absolute',
-    zIndex: 5,
-    top: 0,
-    left: 0,
-    right: 0,
     padding: 10,
     backgroundColor: 'transparent',
     alignItems: 'flex-start',
@@ -601,7 +598,11 @@ export default StyleSheet.create({
   },
   rowBottom: {
     marginBottom: 5,
+    marginTop: 10,
     backgroundColor: 'transparent'
+  },
+  rowBottomNoLive: {
+    marginTop: 20
   },
   containerAudioBottom: {
     position: 'absolute',
@@ -659,11 +660,7 @@ export default StyleSheet.create({
     height: 30
   },
   formGroup: {
-    padding: 5,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#000000',
-    height: 20
+    marginTop: 10
   },
   link: {
     color: '#0099cc'
@@ -672,6 +669,53 @@ export default StyleSheet.create({
     height: 20
   },
   logoNavBarAudio: {
-    flex: 1
+    flex: 1,
+    left: -5
+  },
+  wrapperAudioSwipper: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginTop: 60
+  },
+  paginationAudio: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 26
+  },
+  wrapperBtnLogin: {
+    marginTop: 10,
+    marginBottom: 10
+  },
+  btnLogin: {
+    backgroundColor: '#45cbe2',
+    paddingTop: 7,
+    paddingBottom: 7,
+    width: 110,
+    borderRadius: 3,
+    marginRight: 10
+  },
+  textBtnLogin: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  textCenter: {
+    justifyContent: 'center'
+  },
+  formInput: {
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    height: 30,
+    padding: 5,
+    marginTop: 5,
+    marginBottom: 5
+  },
+  formCheckbox: {
+    borderWidth: 0,
+    marginLeft: 0,
+    paddingLeft: 0
   }
 })

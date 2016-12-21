@@ -13,7 +13,7 @@ const constants = {
   REQUEST_LOGIN_URL: 'https://ottapi.com/v1.7/sbtn/index/login/',
   REQUEST_FB_LOGIN_URL: 'https://ottapi.com/v1.7/sbtn/index/fblogin',
   REQUEST_REGISTER_URL: 'https://ottapi.com/v1.7/sbtn/member/register',
-  REQUEST_FORGOT_PASSWORD_URL: 'https://sbtnapp.com/en/user/forgot_password',
+  REQUEST_FORGOT_PASSWORD_URL: 'http://sbtnapp.com/en/user/forgot_password',
   REQUEST_URL_LIST_CATEGORIES: 'https://ottapi.com/v1.7/sbtn/contentgroup/index/'
 }
 export default constants;

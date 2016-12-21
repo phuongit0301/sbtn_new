@@ -179,12 +179,7 @@ export default class ListCategories extends Component {
   bindOnDetailAudio(id, mode) {
     this.props.navigator.push({
                                 id: id,
-                                component: DetailsCategory,
-                                navigationBar: <NavigationBar title={this.renderLogoNavBar()}
-                                                  statusBar = {{ hidden: true }}
-                                                  leftButton = { this.renderBackButton(mode) }
-                                                  style={styles.navigationBarAudio}
-                                                />
+                                component: DetailsCategory
                               });
   }
 
@@ -238,7 +233,12 @@ export default class ListCategories extends Component {
                   <View key={this.props.id + '_' + index} style={visibility}>
                     <TouchableOpacity onPress = { () => this.bindOnDetail(data.id, rowData.mode) }>
                       <View style={[styles.thumbnailContainer, styles.column]}>
-                        <Image source={{uri: data.image}} style={{ width: imageWidth, height: imageHeight }} />
+                        <Image source={{uri: data.image}}
+                                style={[styles.centering, { width: imageWidth, height: imageHeight }]}
+                                onLoadEnd={(e) => this.setState({imageLoading: false})}
+                        >
+                          <ActivityIndicator animating={this.state.imageLoading} size="small" />
+                        </Image>
                         <View style={styles.titleContainer}>
                           <Text style={styles.title} ellipsizeMode='tail' numberOfLines={1}>{data.name}</Text>
                         </View>

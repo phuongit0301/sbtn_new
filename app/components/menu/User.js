@@ -14,7 +14,9 @@ const defaultName = 'Guest';
 
 import FBSDK from 'react-native-fbsdk';
 const {
-  AccessToken
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
 } = FBSDK;
 
 export default class MenuUserView extends Component {
@@ -23,9 +25,20 @@ export default class MenuUserView extends Component {
       super(props);
       this.state = {
         loaded: false,
-        isFBLogin: false
+        isFBLogin: false,
+        dataFB: []
       }
   }
+
+
+    _responseInfoCallback(error: ?Object, result: ?Object) {
+      let that = this
+      if (error) {
+        console.log('Error fetching data: ' + error.toString());
+      } else {
+          return result;
+      }
+    }
 
   componentWillReceiveProps(nextProps) {
     AccessToken.getCurrentAccessToken().then(
@@ -33,8 +46,23 @@ export default class MenuUserView extends Component {
         this.setState({
           isFBLogin: data != null ? true : false
         })
+
+        if(data) {
+          // Create a graph request asking for user information with a callback to handle the response.
+          const infoRequest = new GraphRequest(
+            '/me?fields=email,name,picture',
+            null,
+            this.setState((oldState) => {
+                this._responseInfoCallback();
+                console.log(a);
+                console.log(oldState);
+            }),
+          );
+          new GraphRequestManager().addRequest(infoRequest).start();
+        }
       }
     );
+
     this.setUserData().done();
   }
 
@@ -48,9 +76,35 @@ export default class MenuUserView extends Component {
     });
   }
 
+  renderAvatar() {
+    console.log(this.state.userData);
+    console.log(this.state.dataFB);
+    let avatar = null;
+    if(this.state.userData && this.state.userData.avatarsUrl) {
+      avatar = this.state.userData.avatarsUrl;
+    } else if(this.state.dataFB && this.state.dataFB.picture) {
+      avatar = this.state.dataFB.picture.data.url;
+    } else {
+      avatar = defaultAvatar;
+    }
+    return avatar;
+  }
+
+  renderName() {
+    let name = null;
+    if(this.state.userData && this.state.userData.fullName) {
+      name = this.state.userData.fullName;
+    } else if(this.state.dataFB && this.state.dataFB.name) {
+      name = this.state.dataFB.name;
+    } else {
+      name = defaultName;
+    }
+    return name;
+  }
+
   render() {
-    let avatar = this.state.userData && this.state.userData.avatarsUrl ? this.state.userData.avatarsUrl : defaultAvatar;
-    let name = this.state.userData && this.state.userData.fullName ? this.state.userData.fullName : defaultName;
+    let avatar = this.renderAvatar();
+    let name = this.renderName();
    return(
      <View style = {styles.menuUserView}>
        <View style = {styles.menuUserInfoView}>

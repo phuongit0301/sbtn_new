@@ -7,7 +7,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  Linking
+  Linking,
+  Image
 } from 'react-native';
 
 import { FormLabel, FormInput, CheckBox, Button } from 'react-native-elements';
@@ -36,7 +37,7 @@ export default class Login extends Component {
     this.state = {
       email: '',
       password: '',
-      checked: false,
+      checked: true,
       loaded: false,
     }
   }
@@ -124,28 +125,10 @@ export default class Login extends Component {
       AsyncStorage.setItem('authorizationPost', JSON.stringify(setAuthorization));
       AsyncStorage.setItem('userData', JSON.stringify(responseJson.data));
       this.props.onCategoryItemSelected({name: 'HOME'});
-      // this.props.navigator.push({
-      //                       id: null,
-      //                       title: 'HOME',
-      //                       component: HomeView,
-      //                       navigationBar: <NavigationBar
-      //                                         title={this.renderLogoNavBar()}
-      //                                         statusBar = {{ hidden: true }}
-      //                                         leftButton={this.renderNavIconMenu()}
-      //                                         rightButton={this.renderNavIconSearch()}
-      //                                         style={styles.navigationBar} />
-      //   })
     } catch(error) {
       console.error(error);
     }
   }
-  //
-  // async regenerateAuthorization(accessToken) {
-  //   let authorization = await Authorization.generate('GET', accessToken);
-  //   await AsyncStorage.removeItem('authorization', (err) => {
-  //     AsyncStorage.setItem('authorization', authorization);
-  //   });
-  // }
 
   printError(message) {
     return (
@@ -213,18 +196,20 @@ export default class Login extends Component {
 
   render() {
     return(
-      <View style={styles.containerAuth}>
+      <View style={[styles.containerAuth, styles.centering]}>
         <View style={styles.column}>
-          <Text style={styles.black}>Logo</Text>
-
-          <View>
-            <FormLabel>Email</FormLabel>
-            <FormInput placeholder="Your email" onChangeText={(email) => this.setState({email})} value={this.state.email} />
+          <View style={styles.centering}>
+            <Image source={require('../../images/Icon-60.png')} style={{marginLeft: 0, marginRight: 0}} />
           </View>
 
-          <View>
-            <FormLabel>Password</FormLabel>
-            <FormInput placeholder="Your password" onChangeText={(password) => this.setState({password})} secureTextEntry={true} />
+          <View style={styles.formGroup}>
+            <Text>Your Email</Text>
+            <TextInput placeholder="Your email" onChangeText={(email) => this.setState({email})} value={this.state.email} style={styles.formInput} />
+          </View>
+
+          <View style={styles.formGroup}>
+            <Text>Your Password</Text>
+            <TextInput placeholder="Your password" onChangeText={(password) => this.setState({password})} secureTextEntry={true} style={styles.formInput} />
           </View>
 
           <View>
@@ -232,23 +217,30 @@ export default class Login extends Component {
               title='Remember me'
               checked={this.state.checked}
               onPress={() => this.setState({checked: !this.state.checked})}
+              containerStyle={styles.formCheckbox}
+              checkedColor='#0099cc'
               />
           </View>
 
-          <View>
-              <Text style={styles.link} onPress={() => this._goToURL(REQUEST_FORGOT_PASSWORD_URL)}>Forgot your password</Text>
-          </View>
+          <TouchableOpacity>
+            <Text style={styles.link} onPress={() => this._goToURL(REQUEST_FORGOT_PASSWORD_URL)}>Forgot your password</Text>
+          </TouchableOpacity>
 
-          <View>
-            <View style={styles.row}>
-              <Button title='Login' onPress={() => this.checkLogin().done()} />
-              <FBLoginButton navigator={this.props.navigator} />
+
+            <View style={styles.wrapperBtnLogin}>
+              <View style={styles.row}>
+                <View style={styles.btnLogin}>
+                  <TouchableOpacity onPress={() => this.checkLogin().done()}>
+                    <Text style={[styles.textBtnLogin, styles.white]}>Login</Text>
+                  </TouchableOpacity>
+                </View>
+                <FBLoginButton navigator={this.props.navigator} />
+              </View>
             </View>
-          </View>
 
           <View>
-            <View style={styles.row}>
-              <Text>Not a member?</Text>
+            <View style={[styles.row, styles.textCenter]}>
+              <Text style={{marginRight: 10}}>Not a member?</Text>
               <TouchableOpacity
                 onPress={() => this.props.navigator.push({
                   id: null,

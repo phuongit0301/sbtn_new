@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableHighlight, TouchableOpacity, Di
 import styles from '../../styles/Style';
 import Video from 'react-native-video';
 import DetailsCategory from '../categories/DetailsCategory';
+import Swiper from 'react-native-swiper'
 
 import NavigationBar from 'react-native-navbar';
 import { Icon } from 'react-native-elements';
@@ -129,15 +130,16 @@ export default class ItemPlayer extends Component {
        outputRange: [getStartValue(), getEndValue()]
      });
 
+    const rowLive = this.props.dataAudio.isLive ? styles.rowBottom : styles.rowBottomNoLive;
+
     return (
       <Animated.View style={[styles.container]}>
-        <Image source={{uri: this.props.dataAudio.image}} style={styles.backgroundAudioFull} blurRadius={40}>
-           <View style={[styles.column, {flex: 1, alignItems: 'center', justifyContent: 'center'}]}>
+        <Image source={{uri: this.props.dataAudio.image}} style={{height: height}} blurRadius={40}>
+           <View style={[styles.column, {flex: 1, alignItems: 'flex-start', justifyContent: 'flex-start'}]}>
              <View style={[styles.navigationBarAudio, styles.row]}>
                 { this.renderBackButton(this.props.dataAudio.mode) }
                 { this.renderLogoNavBar() }
              </View>
-
                <Video source={{uri: 'http://f9.stream.nixcdn.com/8b7876d3d29fbeafe82d4660411eec98/5858aaff/NhacCuaTui932/LoiTuSu-UngDaiVe-4684313.mp3'}} // Looks for .mp4 file (background.mp4) in the given expansion version.
                   ref={(ref) => {
                     this.player = ref
@@ -155,15 +157,32 @@ export default class ItemPlayer extends Component {
                   onProgress={this.onProgress}      // Callback every ~250ms with currentTime
                   onEnd={this.onEnd}             // Callback when playback finishes
                   onError={this.videoError}      // Callback when video cannot be loaded
-                  style={{position: 'absolute', bottom: 0}}
                />
 
-               <Animated.Image source={{uri: this.props.dataAudio.image}}
-                                style={[styles.centering, {width: width/2, height: width/2, borderRadius: width/4, transform: [{rotate: spin}]}]}
-                                onLoadEnd={(e) => this.setState({imageLoading: false})}
-                >
-                   <ActivityIndicator animating={this.state.imageLoading} size="small" />
-               </Animated.Image>
+               <Swiper showsPagination={true}
+                        dot={<View style={{backgroundColor: 'rgba(255,255,255,.3)', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
+                        activeDot={<View style={{backgroundColor: '#fff', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
+                        loop={false}
+                        index={1}
+                        paginationStyle={styles.paginationAudio}
+               >
+                 <View style={styles.wrapperAudioSwipper}>
+                  <Text style={styles.white}>And simple</Text>
+                 </View>
+
+                 <View style={styles.wrapperAudioSwipper}>
+                   <Animated.Image source={{uri: this.props.dataAudio.image}}
+                                    style={[{width: width - 50, height: width - 50, borderRadius: ((width - 50)/2), transform: [{rotate: spin}]}]}
+                                    onLoadEnd={(e) => this.setState({imageLoading: false})}
+                    >
+                       <ActivityIndicator animating={this.state.imageLoading} size="small" />
+                   </Animated.Image>
+                 </View>
+
+                 <View style={styles.wrapperAudioSwipper}>
+                   <Text style={styles.white}>And simple</Text>
+                 </View>
+               </Swiper>
 
            </View>
 
@@ -171,17 +190,21 @@ export default class ItemPlayer extends Component {
 
               <View style={styles.rowBottom}><Text style={styles.white}>{this.props.dataAudio.name}</Text></View>
 
-              <View style={[styles.row, styles.rowBottom]}>
+              <View style={[styles.row, rowLive]}>
 
-                  <View style={[styles.isLive, styles.row]}>
-                    <Icon
-                      name='circle'
-                      type='font-awesome'
-                      color='red'
-                      size={4}
-                    />
-                    <Text style={[styles.white, styles.isLiveText]}>Live</Text>
-                  </View>
+                  {
+                    this.props.dataAudio.isLive ?
+                      <View style={[styles.isLive, styles.row]}>
+                        <Icon
+                          name='circle'
+                          type='font-awesome'
+                          color='red'
+                          size={4}
+                        />
+                        <Text style={[styles.white, styles.isLiveText]}>Live</Text>
+                      </View>
+                    : null
+                  }
 
                   <View style={styles.trackingControls}>
                     <View style={styles.progress}>
