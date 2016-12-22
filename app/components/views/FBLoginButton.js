@@ -1,11 +1,14 @@
 import React, {Component} from 'react';
 import {
-  View
+  View,
+  AsyncStorage
 } from 'react-native';
 import FBSDK from 'react-native-fbsdk';
 const {
   LoginButton,
-  AccessToken
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
 } = FBSDK;
 
 export default class FBLoginButton extends Component {
@@ -16,11 +19,6 @@ export default class FBLoginButton extends Component {
     this.state = {
       isLogin: false
     }
-    this.redirectToHomePage = this.redirectToHomePage.bind(this);
-  }
-
-  redirectToHomePage() {
-    return this.props.navigator.pop();
   }
 
   render() {
@@ -37,14 +35,35 @@ export default class FBLoginButton extends Component {
               } else {
                 alert("Login was successful");
 
+                const responseInfoCallback = (error: ?Object, result: ?Object) => {
+                  if (error) {
+                    console.log('Error fetching data: ' + error.toString());
+                  } else {
+                      AsyncStorage.setItem('dataFB', JSON.stringify(result));
+                  }
+                }
+
+                // Create a graph request asking for user information with a callback to handle the response.
+                const infoRequest = new GraphRequest(
+                  '/me?fields=email,name,picture',
+                  null,
+                  responseInfoCallback
+                );
+                new GraphRequestManager().addRequest(infoRequest).start();
+
                 this.setState({
                     isLogin: true
                 })
-                this.redirectToHomePage();
+
               }
             }
           }
-          onLogoutFinished={() => alert("User logged out")}/>
+          onLogoutFinished={
+            () => {
+                alert("User logged out");
+                AsyncStorage.removeItem('dataFB');
+              }
+            }/>
       </View>
     )
   }

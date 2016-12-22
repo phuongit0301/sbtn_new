@@ -15,8 +15,6 @@ const defaultName = 'Guest';
 import FBSDK from 'react-native-fbsdk';
 const {
   AccessToken,
-  GraphRequest,
-  GraphRequestManager,
 } = FBSDK;
 
 export default class MenuUserView extends Component {
@@ -30,40 +28,34 @@ export default class MenuUserView extends Component {
       }
   }
 
-
-    _responseInfoCallback(error: ?Object, result: ?Object) {
-      let that = this
-      if (error) {
-        console.log('Error fetching data: ' + error.toString());
-      } else {
-          return result;
-      }
-    }
-
   componentWillReceiveProps(nextProps) {
     AccessToken.getCurrentAccessToken().then(
       (data) => {
         this.setState({
           isFBLogin: data != null ? true : false
         })
-
-        if(data) {
-          // Create a graph request asking for user information with a callback to handle the response.
-          const infoRequest = new GraphRequest(
-            '/me?fields=email,name,picture',
-            null,
-            this.setState((oldState) => {
-                this._responseInfoCallback();
-                console.log(a);
-                console.log(oldState);
-            }),
-          );
-          new GraphRequestManager().addRequest(infoRequest).start();
+        if(data != null) {
+          this.getDataFB().done();
+        } else {
+          this.setState({
+            dataFB: null,
+            loaded: false
+          });
         }
       }
     );
 
     this.setUserData().done();
+  }
+
+  async getDataFB() {
+    await AsyncStorage.getItem('dataFB').then((userDataJson) => {
+      let userData = JSON.parse(userDataJson);
+      this.setState({
+        dataFB: userData,
+        loaded: true
+      });
+    });
   }
 
   async setUserData() {
@@ -77,8 +69,6 @@ export default class MenuUserView extends Component {
   }
 
   renderAvatar() {
-    console.log(this.state.userData);
-    console.log(this.state.dataFB);
     let avatar = null;
     if(this.state.userData && this.state.userData.avatarsUrl) {
       avatar = this.state.userData.avatarsUrl;

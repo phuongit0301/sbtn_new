@@ -140,7 +140,7 @@ export default class VideoPlayer extends Component {
     let backgroundVideo = this.state.resizeMode === 'contain' ? styles.backgroundVideo : styles.backgroundVideoFull;
     let backgroundHeightVideo = this.state.resizeMode === 'contain' ? {height: width/16*9} : {height: height};
     const selectedTab = this.state.selectedTab;
-console.log(123123123);
+
     return (
       <View style={styles.containerVideo}>
         <View style={[backgroundVideo, backgroundHeightVideo]}>
@@ -256,7 +256,10 @@ console.log(123123123);
                      </View>
                    :
                    <View>
-                      <Image source={{uri: this.state.dataVideo.image}} style={[styles.centering, {width: width, height: width/16*9}]}>
+                      <Image source={{uri: this.state.dataVideo.image}}
+                          style={[styles.centering, {width: width, height: width/16*9}]}
+                          onLoadEnd={(e) => this.setState({imageLoading: false})}
+                      >
                           <ActivityIndicator animating={this.state.imageLoading} size="small" />
                       </Image>
                    </View>
