@@ -64,6 +64,7 @@ export default class ListCategories extends Component {
       authorization: JSON.parse(authorization),
       //items: this.props.route.passProps.items.length > 0 ? this.props.route.passProps.items : []
     })
+    console.log(456);
   }
 
    componentWillReceiveProps(nextProps) {
@@ -267,6 +268,7 @@ export default class ListCategories extends Component {
   renderRowItemAudio(rowData) {
     return(
       <View style={styles.container}>
+        <LazyloadScrollView name={"lazyload-list-audio-"+rowData.id}>
           <View style={[styles.sectionHeader]}>
               <Text style={styles.sectionText}>{rowData.name}</Text>
             {
@@ -281,20 +283,22 @@ export default class ListCategories extends Component {
           <View style={[styles.blocks]}>
             {
               rowData.items.map((data, index) => {
-                const visibility = index > 5 ? styles.hidden : { width: imageWidthAudio, height: imageWidthAudio + 20};
+                const visibility = index > 5 ? styles.hidden : { width: imageWidthAudio, height: imageWidthAudio + 20, marginRight: 5};
                 return(
                   <View key={this.props.id + '_' + index} style={visibility}>
                     <TouchableOpacity onPress = { () => this.bindOnDetail(data.id, rowData.mode) }>
-                      <View style={[styles.thumbnailContainer, styles.column]}>
-                        <Image source={{uri: data.image}}
-                                style={[styles.centering, { width: imageWidthAudio, height: imageWidthAudio }]}
+                      <View style={[styles.thumbnailContainer, styles.column, { width: imageWidthAudio, height: imageWidthAudio, overflow: 'hidden' }]}>
+                        <LazyloadImage
+                                source={{uri: data.images[imageDevice]}}
+                                style={[styles.centering, { width: undefined, height: undefined, flex: 1 }]}
                                 onLoadEnd={(e) => this.setState({imageLoading: false})}
+                                host={"lazyload-list-audio-"+rowData.id}
                         >
                           <ActivityIndicator animating={this.state.imageLoading} size="small" />
-                        </Image>
-                        <View style={styles.titleContainer}>
+                        </LazyloadImage>
+                        <LazyloadView style={styles.titleContainer} host={"lazyload-list-audio-"+rowData.id}>
                           <Text style={styles.title} ellipsizeMode='tail' numberOfLines={1}>{data.name}</Text>
-                        </View>
+                        </LazyloadView>
                       </View>
                     </TouchableOpacity>
                   </View>
@@ -302,6 +306,7 @@ export default class ListCategories extends Component {
               })
             }
           </View>
+        </LazyloadScrollView>
       </View>
     )
   }

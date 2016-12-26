@@ -7,6 +7,12 @@ import NavigationBar from 'react-native-navbar';
 let {width, height} = Dimensions.get('window');
 let top = (width/16*9) + 50;
 
+import {
+    LazyloadScrollView,
+    LazyloadView,
+    LazyloadImage
+} from 'react-native-lazyload';
+
 export default Relates = (props) => {
   const createItem = (item, i) => {
     return (
@@ -23,7 +29,7 @@ export default Relates = (props) => {
                                                                                     />
                                                                   })} key={item.id}>
           <View>
-            <Image source={{uri: item.image}} style={[{width: (width/2), height: (width/2)/16*9}]} />
+            <LazyloadImage source={{uri: item.image}} style={[{width: (width/2), height: (width/2)/16*9}]} host="lazyload-relates" />
             <Text style={styles.title} ellipsizeMode='tail' numberOfLines={1}>{item.name}</Text>
           </View>
 
@@ -32,17 +38,16 @@ export default Relates = (props) => {
   }
 
   return (
-    <ScrollView
+    <LazyloadScrollView
     automaticallyAdjustInsets={false}
     style={[styles.containerRelate, {top: top, width: width, height: width + 20}]}
     contentContainerStyle={{paddingBottom: 50}}
-    decelerationRate={0}
-    snapToInterval={16}
     snapToAlignment="start"
+    name="lazyload-relates"
     >
         <View style={styles.imageGrid}>
           { props.related.map(createItem) }
         </View>
-    </ScrollView>
+    </LazyloadScrollView>
   )
 }

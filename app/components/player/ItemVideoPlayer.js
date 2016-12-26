@@ -35,7 +35,9 @@ export default class VideoPlayer extends Component {
       selectedTab: 'information',
       imageLoading: true,
       linkVideo: '',
-      linkKaraoke: false
+      linkKaraoke: false,
+      width: 0,
+      height: 0
     });
     this.onLoad = this.onLoad.bind(this);
     this.onProgress = this.onProgress.bind(this);
@@ -43,13 +45,26 @@ export default class VideoPlayer extends Component {
   }
 
   componentWillMount() {
-      let resizeMode = width > height ? 'stretch' : 'contain';
-      this.setState({
-        resizeMode: resizeMode,
-        dataVideo: this.props.dataVideo,
-        dataRelate: this.props.dataRelate,
-        linkVideo: this.props.dataVideo.link
-      })
+    let resizeMode = width > height ? 'stretch' : 'contain';
+
+    this.setState({
+      resizeMode: resizeMode,
+      dataVideo: this.props.dataVideo,
+      dataRelate: this.props.dataRelate,
+      linkVideo: this.props.dataVideo.link,
+      width: width,
+      height: height
+    });
+
+    this.setData().done();
+  }
+
+  async setData() {
+    let isLogin = JSON.stringify(await AsyncStorage.getItem('isLogin'));
+
+    this.setState({
+      isLogin: isLogin
+    });
   }
 
   onLoad(data) {
@@ -60,7 +75,10 @@ export default class VideoPlayer extends Component {
   }
 
   onProgress(data) {
-    this.setState({currentTime: data.currentTime});
+    this.setState({
+      currentTime: data.currentTime,
+      imageLoading: false
+    });
   }
 
   getCurrentTimePercentage() {
@@ -96,16 +114,6 @@ export default class VideoPlayer extends Component {
     });
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   console.log('prevProps');
-  //   console.log(prevProps);
-  //   prevProps.navigator.navigationContext.addListener('willfocus', (event) => {
-  //      this.setState({
-  //        paused: true
-  //      });
-  //   });
-  // }
-
   componentWillUnmount() {
     this.onListener.remove();
   }
@@ -132,7 +140,19 @@ export default class VideoPlayer extends Component {
       linkKaraoke: !this.state.linkKaraoke
     });
   }
+  _onLayout = event => {
+    let resizeMode = 'contain';
 
+    if(event.nativeEvent.layout.width > event.nativeEvent.layout.height) {
+        resizeMode = 'stretch';
+    }
+
+    this.setState({
+      resizeMode: resizeMode,
+      width: event.nativeEvent.layout.width,
+      height: event.nativeEvent.layout.height
+    });
+  }
   render() {
 
     let flexCompleted = this.getCurrentTimePercentage() * 100;
@@ -142,7 +162,7 @@ export default class VideoPlayer extends Component {
     const selectedTab = this.state.selectedTab;
 
     return (
-      <View style={styles.containerVideo}>
+      <View style={styles.containerVideo} onLayout={this._onLayout}>
         <View style={[backgroundVideo, backgroundHeightVideo]}>
           <Video source={{uri: this.state.linkVideo}} // Looks for .mp4 file (background.mp4) in the given expansion version.
                ref={(ref) => {
@@ -165,7 +185,7 @@ export default class VideoPlayer extends Component {
                style={[backgroundVideo, backgroundHeightVideo]} />
 
                {
-                 this.state.duration ?
+                 (this.state.duration && this.state.resizeMode === 'contain') ?
                     <View style={{flex: 1}}>
 
                        <View style={[styles.playerContainer, styles.row]}>
@@ -255,14 +275,15 @@ export default class VideoPlayer extends Component {
                         }
                      </View>
                    :
-                   <View>
-                      <Image source={{uri: this.state.dataVideo.image}}
-                          style={[styles.centering, {width: width, height: width/16*9}]}
-                          onLoadEnd={(e) => this.setState({imageLoading: false})}
-                      >
-                          <ActivityIndicator animating={this.state.imageLoading} size="small" />
-                      </Image>
-                   </View>
+                    !this.state.duration ?
+                       <View>
+                          <Image source={{uri: this.state.dataVideo.image}}
+                              style={[styles.centering, {width: this.state.width, height: this.state.width/16*9}]}
+                          >
+                              <ActivityIndicator animating={this.state.imageLoading} size="small" />
+                          </Image>
+                       </View>
+                     : null
                  }
        </View>
 

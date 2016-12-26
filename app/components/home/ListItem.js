@@ -136,7 +136,6 @@ export default class ListItem extends Component {
                                                                                                         style={styles.navigationBar}
                                                                                                         rightButton = { this.renderNavIconSearch() } />
                                                                                     })}>
-                                                                                    {console.log(imageDevice)}
                       <View style={[{width: ((width*3/4) - 10), height: (((width*3/4) + 35) / 16 * 9), marginRight: 5, overflow: 'hidden'}]}>
                           <LazyloadImage
                               resizeMode="contain"

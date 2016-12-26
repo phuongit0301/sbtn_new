@@ -46,6 +46,12 @@ export default class MenuUserView extends Component {
     );
 
     this.setUserData().done();
+
+    if(this.state.userData || this.state.isFBLogin) {
+        AsyncStorage.setItem('isLogin', JSON.stringify(true));
+    } else {
+      AsyncStorage.setItem('isLogin', JSON.stringify(false));
+    }
   }
 
   async getDataFB() {

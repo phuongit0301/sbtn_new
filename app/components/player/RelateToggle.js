@@ -7,6 +7,12 @@ import NavigationBar from 'react-native-navbar';
 let {width, height} = Dimensions.get('window');
 let top = (width/16*9);
 
+import {
+    LazyloadScrollView,
+    LazyloadView,
+    LazyloadImage
+} from 'react-native-lazyload';
+
 export default class RelateToggle extends Component {
 
   constructor(props) {
@@ -87,15 +93,16 @@ export default class RelateToggle extends Component {
                                                                               })}>
 
                     <View style={[grid, styles.border1px, styles.timelinesItemContainer, {width: widthContainer}]}>
-                        <Image source={{uri: item.image}}
+                        <LazyloadImage source={{uri: item.image}}
                               style={[styles.marginRight, styles.centering, { width: widthImage, height: heightImage }]}
                               onLoadEnd={(e) => this.setState({imageLoading: false})}
+                              host="lazyload-relate-toggle"
                         >
                           <ActivityIndicator animating={this.state.imageLoading} size="small" />
-                        </Image>
-                        <View style={styles.titleContainer}>
+                        </LazyloadImage>
+                        <LazyloadView style={styles.titleContainer} host="lazyload-relate-toggle">
                           <Text style={[textColor]}>{item.name}</Text>
-                        </View>
+                        </LazyloadView>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -107,15 +114,17 @@ export default class RelateToggle extends Component {
   }
 
   render() {
+    console.log(width);
+    console.log(height);
     return (
       width > height ?
-        <ScrollView style={[styles.toggleData, {width: width * 0.3, height: width}]}>
+        <LazyloadScrollView style={[styles.toggleData, {width: width * 0.3, height: width}]} name="lazyload-relate-toggle">
             { this.createItem(this.props.dataRelate) }
-        </ScrollView>
+        </LazyloadScrollView>
       :
-        <ScrollView style={[styles.containerRelate, {top: top, width: width,height: width}]}>
+        <LazyloadScrollView style={[styles.containerRelate, {top: top, width: width,height: width}]} name="lazyload-relate-toggle">
             { this.createItem(this.props.dataRelate) }
-        </ScrollView>
+        </LazyloadScrollView>
     )
   }
 }
