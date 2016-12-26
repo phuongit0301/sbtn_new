@@ -15,6 +15,7 @@ import {
 
 import ImageSlider from 'react-native-image-slider';
 import ListItem from './ListItem';
+import ListItemListen from './ListItemListen';
 import Slider from '../general/Slider';
 import styles from '../../styles/Style';
 import constants from '../../constants/Types';
@@ -32,28 +33,17 @@ export default class HomeView extends Component {
     super(props);
 
     this.state = {
-      screenSize: { width, height },
-      imgBannerSize: { width: width, height: width / 16 * 9 },
       dataAuthorization: '',
 
       listImageSlide: [],
       listDataView: null,
-      listDataListen:null,
-      position: 1,
-      interval: null,
+      listDataListen: null,
+      loaded: false,
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
       this._generateAuthorization().done();
-
-      this.setState({interval: setInterval(() => {
-          this.setState({position: this.state.position === this.state.listImageSlide.length ? 0 : this.state.position + 1});
-      }, 2000)});
-  }
-
-  componentWillUnmount() {
-      clearInterval(this.state.interval);
   }
 
   async _generateAuthorization() {
@@ -83,9 +73,10 @@ export default class HomeView extends Component {
 
 
       this.setState({
-        listImageSlide: responseData.banners || [],
-        listDataView: responseData.view || [],
-        listDataListen: responseData.listen || [],
+        listImageSlide: responseData.banners,
+        listDataView: responseData.view,
+        listDataListen: responseData.listen,
+        loaded: true
       })
     } catch(error) {
       console.error(error);
@@ -95,13 +86,15 @@ export default class HomeView extends Component {
   render() {
     return(
       <View style={styles.container}>
-        <ScrollView>
-          <Slider listImageSlide={this.state.listImageSlide} position={this.state.position}
-                      onPositionChanged={position => this.setState({position})} />
-          <ListItem dataList={this.state.listDataView} onCategoryItemSelected={this.props.onCategoryItemSelected} navigator={this.props.navigator} />
-          <ListItem dataList={this.state.listDataListen} onCategoryItemSelected={this.props.onCategoryItemSelected} navigator={this.props.navigator} />
-
-        </ScrollView>
+          {
+            this.state.loaded ?
+              <ScrollView>
+                <Slider listImageSlide={this.state.listImageSlide} />
+                <ListItem dataList={this.state.listDataView} onCategoryItemSelected={this.props.onCategoryItemSelected} navigator={this.props.navigator} />
+                <ListItemListen dataList={this.state.listDataListen} onCategoryItemSelected={this.props.onCategoryItemSelected} navigator={this.props.navigator} />
+              </ScrollView>
+            : null
+          }
       </View>
    )
   }

@@ -8,10 +8,17 @@ import styles from '../../styles/Style';
 import { Icon } from 'react-native-elements';
 import NavigationBar from 'react-native-navbar';
 
+import {
+    LazyloadScrollView,
+    LazyloadView,
+    LazyloadImage
+} from 'react-native-lazyload';
+
 const { width, height } = Dimensions.get('window');
 
 const BLOCK_MARGIN = 5;
 const _oldProgress = 0;
+const imageDevice = width+'x'+height;
 
 export default class ListItem extends Component {
   static propsType = {
@@ -108,17 +115,14 @@ export default class ListItem extends Component {
   }
 
   renderDataContent(dataList, key) {
-    let len = this.props.dataList[key] ? this.props.dataList[key].length : height;
+    let len = dataList[key] ? dataList[key].length : height;
     return (
           <View style={styles.scrollArea}>
-             <ScrollView
-                automaticallyAdjustInsets={false}
+             <LazyloadScrollView
                 contentContainerStyle={[styles.content, {width: ((len*3/4) * (width - 5)) }]}
                 style={styles.scrollView}
                 horizontal={true}
-                decelerationRate={0}
-                snapToInterval={16}
-                snapToAlignment="start"
+                name={"lazyload-home-"+key}
               >
                {
                   dataList[key].map((data, index) => {
@@ -132,24 +136,27 @@ export default class ListItem extends Component {
                                                                                                         style={styles.navigationBar}
                                                                                                         rightButton = { this.renderNavIconSearch() } />
                                                                                     })}>
-                      <View style={[styles.containerColumn, {width: ((width*3/4) - 10), height: (((width*3/4) + 35) / 16 * 9)}]}>
-                          <Image
-                              style={[styles.centering, {width: ((width*3/4) - 10), height: ((width*3/4) / 16*9)}]}
-                              source={{uri: data.image}}
+                                                                                    {console.log(imageDevice)}
+                      <View style={[{width: ((width*3/4) - 10), height: (((width*3/4) + 35) / 16 * 9), marginRight: 5, overflow: 'hidden'}]}>
+                          <LazyloadImage
+                              resizeMode="contain"
+                              style={[styles.centering, { width: undefined, height: undefined, flex: 1 }]}
+                              source={{uri: data.images[imageDevice]}}
                               onLoadEnd={(e) => this.setState({imageLoading: false})}
+                              host={"lazyload-home-"+key}
                           >
                               <ActivityIndicator animating={this.state.imageLoading} size="small" />
-                          </Image>
+                          </LazyloadImage>
 
-                          <View style={styles.titleContainer, [{width: this.state.width}]}>
+                          <LazyloadView style={styles.titleContainer, [{width: this.state.width}]} host={"lazyload-home-"+key}>
                             <Text style={styles.title} ellipsizeMode='tail' numberOfLines={1}>{data.name}</Text>
-                          </View>
+                          </LazyloadView>
                       </View>
                       </TouchableOpacity>
                     )
                  })
                }
-             </ScrollView>
+             </LazyloadScrollView>
            </View>
       )
   }
@@ -157,7 +164,7 @@ export default class ListItem extends Component {
   render() {
     return (
       <View style={styles.scrollContainer}>
-        { this.props.dataList ? this.renderData(this.props.dataList) : null }
+        { this.state.dataList ? this.renderData(this.state.dataList) : null }
       </View>
     );
   }

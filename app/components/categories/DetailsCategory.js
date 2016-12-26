@@ -40,7 +40,7 @@ export default class DetailsCategory extends Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this._generateAuthorization().done();
   }
 
@@ -68,9 +68,6 @@ export default class DetailsCategory extends Component {
                                   }
                                 });
       let responseJson = await response.json();
-
-      const imageWidth = (width/2) - 5;
-      const imageHeight = (width/2)/16*9;
 
       //check if type is timelines
       let dataVideo = (this.props.route.title === 'timelines' && this.props.route.timeline) ? this.props.route.timeline : responseJson.content;

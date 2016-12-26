@@ -14,6 +14,13 @@ const imageWidth = (width/2) - 5;
 const imageHeight = (width/2)/16*9;
 const imageWidthAudio = (width/3) - 5;
 const imageHeightAudio = (width/3)/16*9;
+const imageDevice = width+'x'+height;
+
+import {
+    LazyloadScrollView,
+    LazyloadView,
+    LazyloadImage
+} from 'react-native-lazyload';
 
 import constants from '../../constants/Types';
 const {
@@ -45,7 +52,7 @@ export default class ListCategories extends Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     let authorization = this.getAuthorization().done();
   }
 
@@ -214,6 +221,7 @@ export default class ListCategories extends Component {
   renderRowItemVideo(rowData) {
     return(
       <View style={styles.container}>
+        <LazyloadScrollView name={"lazyload-list-"+rowData.id}>
           <View style={[styles.sectionHeader]}>
               <Text style={styles.sectionText}>{rowData.name}</Text>
             {
@@ -228,20 +236,22 @@ export default class ListCategories extends Component {
           <View style={[styles.blocks]}>
             {
               rowData.items.map((data, index) => {
-                const visibility = index > 5 ? styles.hidden : { width: imageWidth, height: imageHeight + 20};
+                const visibility = index > 5 ? styles.hidden : { width: imageWidth, height: imageHeight + 20, marginRight: 5, overflow: 'hidden'};
                 return(
                   <View key={this.props.id + '_' + index} style={visibility}>
                     <TouchableOpacity onPress = { () => this.bindOnDetail(data.id, rowData.mode) }>
-                      <View style={[styles.thumbnailContainer, styles.column]}>
-                        <Image source={{uri: data.image}}
-                                style={[styles.centering, { width: imageWidth, height: imageHeight }]}
+                      <View style={[styles.thumbnailContainer, styles.column, { width: imageWidth, height: imageHeight + 20}]}>
+                        <LazyloadImage source={{uri: data.images[imageDevice]}}
+                                resizeMode="contain"
+                                style={[styles.centering, { width: undefined, height: undefined, flex: 1 }]}
                                 onLoadEnd={(e) => this.setState({imageLoading: false})}
+                                host={"lazyload-list-"+rowData.id}
                         >
                           <ActivityIndicator animating={this.state.imageLoading} size="small" />
-                        </Image>
-                        <View style={styles.titleContainer}>
-                          <Text style={styles.title} ellipsizeMode='tail' numberOfLines={1}>{data.name}</Text>
-                        </View>
+                        </LazyloadImage>
+                        <LazyloadView style={styles.titleContainer}>
+                          <Text style={styles.title} ellipsizeMode='tail' numberOfLines={1} host={"lazyload-list-"+rowData.id}>{data.name}</Text>
+                        </LazyloadView>
                       </View>
                     </TouchableOpacity>
                   </View>
@@ -249,6 +259,7 @@ export default class ListCategories extends Component {
               })
             }
           </View>
+          </LazyloadScrollView>
       </View>
     )
   }

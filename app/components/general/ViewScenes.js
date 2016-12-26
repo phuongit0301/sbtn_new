@@ -59,7 +59,6 @@ export default class ViewScenes extends Component {
    }
 
   render() {
-
     const menu = <MenuView onItemSelected={this.onMenuItemSelected} onMenuToogle={this.toogle} />;
     return (
       <View style={styles.container}>
