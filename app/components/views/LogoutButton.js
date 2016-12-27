@@ -25,7 +25,7 @@ export default class LogoutButton extends Component {
 
   logout(){
     LoginManager.logOut();
-    AsyncStorage.multiRemove(['userData', 'dataFB']).then(() => {
+    AsyncStorage.multiRemove(['userData', 'dataFB', 'isLogin']).then(() => {
       this.setState({loaded: false});
       this.props.onItemSelected({name: 'HOME'});
     });

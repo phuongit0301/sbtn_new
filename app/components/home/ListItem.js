@@ -79,7 +79,7 @@ export default class ListItem extends Component {
                           id: null,
                           title: 'SEARCH',
                           component: Search,
-                          navigationBar: <NavigationBar title={this.renderLogoNavBar()} statusBar = {{ hidden: true }} leftButton={this.renderBackButton()}
+                          navigationBar: <NavigationBar title={this.renderLogoNavBar()} leftButton={this.renderBackButton()}
                           style={styles.navigationBar} />
       })
   }
@@ -119,7 +119,7 @@ export default class ListItem extends Component {
     return (
           <View style={styles.scrollArea}>
              <LazyloadScrollView
-                contentContainerStyle={[styles.content, {width: ((len*3/4) * (width - 5)) }]}
+                contentContainerStyle={[styles.content, {width: ((len*3/5) * (width - 5)) }]}
                 style={styles.scrollView}
                 horizontal={true}
                 name={"lazyload-home-"+key}
@@ -131,12 +131,11 @@ export default class ListItem extends Component {
                                                                                       id: data.id,
                                                                                       component: DetailsCategory,
                                                                                       navigationBar: <NavigationBar title={this.renderLogoNavBar()}
-                                                                                                        statusBar = {{ hidden: true }}
                                                                                                         leftButton = { this.renderBackButton() }
                                                                                                         style={styles.navigationBar}
                                                                                                         rightButton = { this.renderNavIconSearch() } />
                                                                                     })}>
-                      <View style={[{width: ((width*3/4) - 10), height: (((width*3/4) + 35) / 16 * 9), marginRight: 5, overflow: 'hidden'}]}>
+                      <View style={[{width: ((width*3/7) - 10), height: ((width*3/7) / 16 * 9), marginRight: 5, overflow: 'hidden'}]}>
                           <LazyloadImage
                               resizeMode="contain"
                               style={[styles.centering, { width: undefined, height: undefined, flex: 1 }]}
@@ -147,7 +146,7 @@ export default class ListItem extends Component {
                               <ActivityIndicator animating={this.state.imageLoading} size="small" />
                           </LazyloadImage>
 
-                          <LazyloadView style={styles.titleContainer, [{width: this.state.width}]} host={"lazyload-home-"+key}>
+                          <LazyloadView style={styles.titleContainer, [{width: ((width*3/7) - 10)}]} host={"lazyload-home-"+key}>
                             <Text style={styles.title} ellipsizeMode='tail' numberOfLines={1}>{data.name}</Text>
                           </LazyloadView>
                       </View>

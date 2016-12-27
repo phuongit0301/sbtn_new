@@ -140,7 +140,7 @@ export default class ItemPlayer extends Component {
                 { this.renderBackButton(this.props.dataAudio.mode) }
                 { this.renderLogoNavBar() }
              </View>
-               <Video source={{uri: 'http://f9.stream.nixcdn.com/8b7876d3d29fbeafe82d4660411eec98/5858aaff/NhacCuaTui932/LoiTuSu-UngDaiVe-4684313.mp3'}} // Looks for .mp4 file (background.mp4) in the given expansion version.
+               <Video source={{uri: this.props.dataAudio.link}} // Looks for .mp4 file (background.mp4) in the given expansion version.
                   ref={(ref) => {
                     this.player = ref
                   }}                             // Store reference

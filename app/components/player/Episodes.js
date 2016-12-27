@@ -22,7 +22,6 @@ export default Episodes = (props) => {
                                                                     component: DetailsCategory,
                                                                     navigationBar: <NavigationBar
                                                                                       title={props.renderLogoNavBar()}
-                                                                                      statusBar = {{ hidden: true }}
                                                                                       leftButton = { props.renderBackButton() }
                                                                                       style={styles.navigationBar}
                                                                                       rightButton = { props.renderNavIconSearch() }

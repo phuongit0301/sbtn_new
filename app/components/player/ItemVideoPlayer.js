@@ -8,13 +8,16 @@ import {
   Dimensions,
   AppState,
   ActivityIndicator,
-  AsyncStorage
+  AsyncStorage,
+  Alert
 } from 'react-native';
 import styles from '../../styles/Style';
 import Video from 'react-native-video';
 import { Icon } from 'react-native-elements';
 import RelateTab from './RelateTab';
 import RelateToggle from './RelateToggle';
+import Login from '../auth/Login';
+import NavigationBar from 'react-native-navbar';
 
 let {width, height} = Dimensions.get('window');
 
@@ -26,6 +29,7 @@ export default class VideoPlayer extends Component {
       rate: 1.0,
       volume: 1.0,
       muted: false,
+      paused: false,
       resizeMode: '',
       duration: 0.0,
       currentTime: 0.0,
@@ -54,16 +58,6 @@ export default class VideoPlayer extends Component {
       linkVideo: this.props.dataVideo.link,
       width: width,
       height: height
-    });
-
-    this.setData().done();
-  }
-
-  async setData() {
-    let isLogin = JSON.stringify(await AsyncStorage.getItem('isLogin'));
-
-    this.setState({
-      isLogin: isLogin
     });
   }
 
@@ -103,15 +97,23 @@ export default class VideoPlayer extends Component {
          paused: true
        });
     });
-    this.dataAudio().done();
+    this.dataProcess().done();
   }
 
-  async dataAudio() {
+  async dataProcess() {
     await AsyncStorage.getAllKeys((err, keys) => {
       if(keys === 'dataAudio' || keys === 'hasAudio') {
           AsyncStorage.multiRemove(keys);
       }
     });
+
+    let isLogin = JSON.parse(await AsyncStorage.getItem('isLogin'));
+
+    this.setState({
+      isLogin: isLogin,
+      paused: isLogin ? false : true
+    });
+    this.checkLogin();
   }
 
   componentWillUnmount() {
@@ -126,7 +128,12 @@ export default class VideoPlayer extends Component {
   }
 
   onPaused() {
-    this.setState({paused: !this.state.paused});
+    if(!this.state.isLogin) {
+      this.checkLogin();
+      this.setState({paused: true});
+    } else {
+      this.setState({paused: !this.state.paused});
+    }
   }
 
   onInfo() {
@@ -153,12 +160,71 @@ export default class VideoPlayer extends Component {
       height: event.nativeEvent.layout.height
     });
   }
-  render() {
 
+  renderNavIconMenu() {
+    return(
+      <View style = { styles.NavIconMenu } >
+        <Icon name = 'menu' color = 'white' onPress = { () => this.props.onMenuToogle() } />
+      </View>
+    )
+  }
+  renderLogoNavBar() {
+    return(
+      <TouchableOpacity onPress= {() => this.props.navigator.popToTop()}>
+          <Text style={styles.logo}>SBTN</Text>
+      </TouchableOpacity>
+    )
+  }
+
+  renderNavIconSearch() {
+    return(
+      <View style={styles.iconSearch}>
+          <Icon name='search' type='font-awesome' color='#fff' size={15} onPress={() => this.bindOnPress()} />
+      </View>
+    )
+  }
+
+  bindOnPress() {
+    this.props.navigator.push({
+                          id: null,
+                          name: 'SEARCH',
+                          component: Search,
+                          navigationBar: <NavigationBar title={this.renderLogoNavBar()} leftButton={this.renderNavIconMenu()}
+                          style={styles.navigationBar} />
+      })
+  }
+
+  onLogin() {
+    this.props.navigator.push({
+      id: null,
+      name: 'LOGIN',
+      component: Login,
+      navigationBar: <NavigationBar title={this.renderLogoNavBar()} leftButton={this.renderNavIconMenu()}
+                                    rightButton={this.renderNavIconSearch()} style={styles.navigationBar}
+                     />
+    });
+  }
+
+  checkLogin() {
+    return (
+      !this.state.isLogin ?
+          Alert.alert(
+            'Message',
+            'You need to login to view contents. Are you want to login now',
+            [
+              { text: 'Login', onPress: () => this.onLogin() },
+              { text: 'Cancel', onPress: () => console.log('cancel') }
+            ]
+          )
+      : null
+    )
+  }
+  render() {
     let flexCompleted = this.getCurrentTimePercentage() * 100;
     let flexRemaining = (1 - this.getCurrentTimePercentage()) * 100;
     let backgroundVideo = this.state.resizeMode === 'contain' ? styles.backgroundVideo : styles.backgroundVideoFull;
     let backgroundHeightVideo = this.state.resizeMode === 'contain' ? {height: width/16*9} : {height: height};
+
     const selectedTab = this.state.selectedTab;
 
     return (
@@ -185,7 +251,7 @@ export default class VideoPlayer extends Component {
                style={[backgroundVideo, backgroundHeightVideo]} />
 
                {
-                 (this.state.duration && this.state.resizeMode === 'contain') ?
+                 (this.state.isLogin && this.state.duration && this.state.resizeMode === 'contain') ?
                     <View style={{flex: 1}}>
 
                        <View style={[styles.playerContainer, styles.row]}>
@@ -280,7 +346,19 @@ export default class VideoPlayer extends Component {
                           <Image source={{uri: this.state.dataVideo.image}}
                               style={[styles.centering, {width: this.state.width, height: this.state.width/16*9}]}
                           >
-                              <ActivityIndicator animating={this.state.imageLoading} size="small" />
+                              {
+                                this.state.paused ?
+                                  <View style={[styles.iconPlay]}>
+                                    <Icon
+                                      name='play'
+                                      type='font-awesome'
+                                      color='#fff'
+                                      size={12}
+                                      onPress={() => this.onPaused()} />
+                                  </View>
+                                :
+                                  <ActivityIndicator animating={this.state.imageLoading} size="small" />
+                              }
                           </Image>
                        </View>
                      : null

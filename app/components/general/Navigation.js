@@ -49,8 +49,8 @@ export default class NavigatorView extends Component {
 
   renderNavIconMenu() {
     return(
-      <View style = { styles.NavIconMenu } >
-        <Icon name = 'menu' color = 'white' onPress = { () => this.props.onMenuToogle() } />
+      <View style = {styles.NavIconMenu} >
+        <Icon name='menu' size={30} color='white' onPress={() => this.props.onMenuToogle()} />
       </View>
     )
   }
@@ -80,7 +80,7 @@ export default class NavigatorView extends Component {
           name='search'
           type='font-awesome'
           color='#fff'
-          size={15}
+          size={20}
           onPress={() => this.bindOnPress()} />
       </View>
     )
@@ -91,7 +91,7 @@ export default class NavigatorView extends Component {
                           id: null,
                           title: 'SEARCH',
                           component: Search,
-                          navigationBar: <NavigationBar title={this.renderLogoNavBar()} statusBar = {{ hidden: true }} leftButton={this.renderBackButton()}
+                          navigationBar: <NavigationBar title={this.renderLogoNavBar()} leftButton={this.renderBackButton()}
                           style={styles.navigationBar} />
       })
   }
@@ -128,7 +128,6 @@ export default class NavigatorView extends Component {
           navigationBar: <NavigationBar
                 style = {styles.navigationBar}
                 title = {this.renderLogoNavBar()}
-                statusBar = {{ hidden: true }}
                 leftButton = { this.renderNavIconMenu() }
                 rightButton = { this.renderNavIconSearch() }
               />

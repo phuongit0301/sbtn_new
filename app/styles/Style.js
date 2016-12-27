@@ -47,7 +47,9 @@ export default StyleSheet.create({
   //Menu
   menuView: {
     flex: 1,
-    flexDirection: 'column'
+    flexDirection: 'column',
+    backgroundColor: '#0099cc',
+    paddingTop: 20
   },
   menuUserView: {
     padding: 5,
@@ -66,9 +68,9 @@ export default StyleSheet.create({
     paddingRight: 5
   },
   menuUserAvatarImage: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     borderWidth: 1,
     borderColor: 'white',
   },
@@ -80,7 +82,7 @@ export default StyleSheet.create({
   },
   menuUserNameText: {
     color: 'white',
-    fontSize: 10,
+    fontSize: 13,
     fontFamily: 'Helvetica'
   },
   menuContentView: {
@@ -146,15 +148,17 @@ export default StyleSheet.create({
   },
   logo: {
     color: '#FFFFFF',
-    fontSize: 24
+    fontSize: 24,
+    fontWeight: 'bold'
   },
   logoAudio: {
     color: '#FFFFFF',
     fontSize: 24,
-    textAlign: 'center'
+    textAlign: 'center',
+    fontWeight: 'bold'
   },
   iconSearch: {
-    marginTop: 15,
+    marginTop: 10,
     marginRight: 15,
   },
   iconBack: {
@@ -185,7 +189,7 @@ export default StyleSheet.create({
     fontSize: 7,
     overflow: 'hidden',
     textAlign: 'center',
-    paddingTop: 5
+    //paddingTop: 5
   },
   contentContainer: {
     justifyContent: 'center',
@@ -487,7 +491,7 @@ export default StyleSheet.create({
   centering: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 8,
+    //padding: 8,
   },
   iconPlay: {
     alignItems: 'center',

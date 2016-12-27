@@ -114,8 +114,6 @@ export default class RelateToggle extends Component {
   }
 
   render() {
-    console.log(width);
-    console.log(height);
     return (
       width > height ?
         <LazyloadScrollView style={[styles.toggleData, {width: width * 0.3, height: width}]} name="lazyload-relate-toggle">

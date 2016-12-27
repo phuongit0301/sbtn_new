@@ -89,7 +89,7 @@ export default class HomeView extends Component {
           {
             this.state.loaded ?
               <ScrollView>
-                <Slider listImageSlide={this.state.listImageSlide} />
+                <Slider listImageSlide={this.state.listImageSlide} navigator={this.props.navigator} />
                 <ListItem dataList={this.state.listDataView} onCategoryItemSelected={this.props.onCategoryItemSelected} navigator={this.props.navigator} />
                 <ListItemListen dataList={this.state.listDataListen} onCategoryItemSelected={this.props.onCategoryItemSelected} navigator={this.props.navigator} />
               </ScrollView>

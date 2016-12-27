@@ -99,7 +99,6 @@ export default class PackageDetails extends Component {
                                 id: id,
                                 component: DetailsCategory,
                                 navigationBar: <NavigationBar title={this.renderLogoNavBar()}
-                                                  statusBar = {{ hidden: true }}
                                                   leftButton = { this.renderBackButton(id, mode) }
                                                   style={styles.navigationBar}
                                                   rightButton = { this.renderNavIconSearch(mode) } />
@@ -228,7 +227,6 @@ export default class PackageDetails extends Component {
                                               childCategoryID: rowData.id,
                                               moreItemsData: rowData.items,
                                               navigationBar: <NavigationBar title={this.renderLogoNavBar()}
-                                                                statusBar = {{ hidden: true }}
                                                                 leftButton = { this.renderBackButton() }
                                                                 style={styles.navigationBar}
                                                                 rightButton = { this.renderNavIconSearch() } />

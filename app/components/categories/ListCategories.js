@@ -64,7 +64,6 @@ export default class ListCategories extends Component {
       authorization: JSON.parse(authorization),
       //items: this.props.route.passProps.items.length > 0 ? this.props.route.passProps.items : []
     })
-    console.log(456);
   }
 
    componentWillReceiveProps(nextProps) {
@@ -172,13 +171,12 @@ export default class ListCategories extends Component {
                           id: null,
                           title: 'SEARCH',
                           component: Search,
-                          navigationBar: <NavigationBar title={this.renderLogoNavBar()} statusBar = {{ hidden: true }} leftButton={this.renderBackButton()}
+                          navigationBar: <NavigationBar title={this.renderLogoNavBar()} leftButton={this.renderBackButton()}
                           style={styles.navigationBar} />
       })
   }
 
   bindOnDetail(id, mode) {
-
     this.props.onAudio(false);
 
     mode == 0 ? this.bindOnDetailAudio(id, mode) : this.bindOnDetailVideo(id, mode);
@@ -195,8 +193,8 @@ export default class ListCategories extends Component {
     this.props.navigator.push({
                                 id: id,
                                 component: DetailsCategory,
+                                passProps: this.props,
                                 navigationBar: <NavigationBar title={this.renderLogoNavBar()}
-                                                  statusBar = {{ hidden: true }}
                                                   leftButton = { this.renderBackButton(mode) }
                                                   style={styles.navigationBar}
                                                   />
@@ -211,7 +209,6 @@ export default class ListCategories extends Component {
                                 childCategoryID: id,
                                 items: items,
                                 navigationBar: <NavigationBar title={this.renderLogoNavBar()}
-                                                  statusBar = {{ hidden: true }}
                                                   leftButton = { this.renderMoreBackButton() }
                                                   style={styles.navigationBar}
                                                   rightButton = { this.renderNavIconSearch() } />
@@ -336,7 +333,6 @@ export default class ListCategories extends Component {
                                                                                     id: data.id,
                                                                                     component: DetailsCategory,
                                                                                     navigationBar: <NavigationBar title={this.renderLogoNavBar()}
-                                                                                                      statusBar = {{ hidden: true }}
                                                                                                       leftButton = { this.renderBackButton() }
                                                                                                       style={styles.navigationBar}
                                                                                                       rightButton = { this.renderNavIconSearch() } />

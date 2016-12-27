@@ -65,7 +65,6 @@ export default class Timelines extends Component {
                                                                           component: DetailsCategory,
                                                                           navigationBar: <NavigationBar
                                                                                             title={this.props.renderLogoNavBar()}
-                                                                                            statusBar = {{ hidden: true }}
                                                                                             leftButton = { this.props.renderBackButton() }
                                                                                             style={styles.navigationBar}
                                                                                             rightButton = { this.props.renderNavIconSearch() }

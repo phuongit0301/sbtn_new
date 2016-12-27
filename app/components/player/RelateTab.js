@@ -77,7 +77,7 @@ export default class RelateTab extends Component {
                           id: null,
                           title: 'SEARCH',
                           component: Search,
-                          navigationBar: <NavigationBar title={this.renderLogoNavBar()} statusBar = {{ hidden: true }} leftButton={this.renderBackButton()}
+                          navigationBar: <NavigationBar title={this.renderLogoNavBar()} leftButton={this.renderBackButton()}
                           style={styles.navigationBar} />
       })
   }
