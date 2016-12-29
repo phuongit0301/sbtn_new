@@ -21,6 +21,7 @@ export default Relates = (props) => {
                                                                     title: 'Relates',
                                                                     component: DetailsCategory,
                                                                     navigationBar: <NavigationBar
+                                                                                      statusBar = {{ hidden: true }}
                                                                                       title={props.renderLogoNavBar()}
                                                                                       leftButton = { props.renderBackButton() }
                                                                                       style={styles.navigationBar}

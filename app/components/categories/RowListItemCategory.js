@@ -59,7 +59,7 @@ export default class RowListItemCategory extends Component {
                           title: 'SEARCH',
                           component: Search,
                           navigationBar: <NavigationBar title={this.renderLogoNavBar()} leftButton={this.renderBackButton()}
-                          style={styles.navigationBar} />
+                                                        statusBar = {{ hidden: true }} style={styles.navigationBar} />
       })
   }
 
@@ -79,6 +79,7 @@ export default class RowListItemCategory extends Component {
                                                                                     id: data.id,
                                                                                     component: DetailsCategory,
                                                                                     navigationBar: <NavigationBar title={this.renderLogoNavBar()}
+                                                                                                      statusBar = {{ hidden: true }}
                                                                                                       leftButton = { this.renderBackButton() }
                                                                                                       style={styles.navigationBar}
                                                                                                       rightButton = { this.renderNavIconSearch() } />

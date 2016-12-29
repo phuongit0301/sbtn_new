@@ -66,15 +66,6 @@ export default class ItemAudioPlayerBottom extends Component {
     }
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   console.log('nextProps');
-  //   console.log(nextProps);
-  //   // this.setState({
-  //   //   hasRadio: !this.props.hasRadio,
-  //   //   paused: false
-  //   // })
-  // }
-
   onLoad(data) {
     this.setState({
       duration: data.duration,
@@ -85,18 +76,6 @@ export default class ItemAudioPlayerBottom extends Component {
   onProgress(data) {
     this.setState({currentTime: data.currentTime});
   }
-
-  // componentDidMount() {
-  //   console.log(this.props.hasAudio);
-  //   if(this.props.hasAudio) {
-  //     this.props.navigator.navigationContext.addListener('willfocus', (event) => {
-  //       console.log(this.props);
-  //        this.setState({
-  //          paused: true
-  //        });
-  //     });
-  //   }
-  // }
 
   componentWillUnmount() {
     this.closeAudio();
@@ -147,22 +126,22 @@ export default class ItemAudioPlayerBottom extends Component {
                        name='close'
                        type='font-awesome'
                        color='white'
-                       size={8}
+                       size={12}
                        containerStyle={styles.circleCloseButtonBottom}
                        onPress={() => this.closeAudio()}
                      />
                    </View>
 
-                   <Image source={{uri: this.state.dataAudio.image}} style={{width: 30, height: 30, borderRadius: 15}} />
+                   <Image source={{uri: this.state.dataAudio.image}} style={{width: 50, height: 50, borderRadius: 25}} />
                    <View style={styles.wrapperTextBottom}><Text style={styles.white}>{this.state.dataAudio.name}</Text></View>
                    <View style={styles.groupButtonRadio}>
                       <Icon
                         name='step-backward'
                         type='font-awesome'
                         color='white'
-                        size={16}
+                        size={18}
                         containerStyle={styles.circleBottom}
-                        onPress={() => this.changeLinkKaraoke(this.state.dataAudio.mp3_link)}
+                        onPress={() => this.onBackward(this.state.dataAudio.mp3_link)}
                       />
 
                       {
@@ -171,7 +150,7 @@ export default class ItemAudioPlayerBottom extends Component {
                             name='play'
                             type='font-awesome'
                             color='white'
-                            size={16}
+                            size={18}
                             containerStyle={styles.circlePlayBottom}
                             onPress={() => this.onPaused()}
                           />
@@ -180,7 +159,7 @@ export default class ItemAudioPlayerBottom extends Component {
                             name='pause'
                             type='font-awesome'
                             color='#fff'
-                            size={16}
+                            size={18}
                             containerStyle={styles.circlePauseBottom}
                             onPress={() => this.onPaused()} />
                       }
@@ -189,9 +168,9 @@ export default class ItemAudioPlayerBottom extends Component {
                       name='step-forward'
                       type='font-awesome'
                       color='white'
-                      size={16}
+                      size={18}
                       containerStyle={styles.circleBottom}
-                      onPress={() => this.changeLinkKaraoke(this.state.dataAudio.mp3_link)}
+                      onPress={() => this.onForward(this.state.dataAudio.mp3_link)}
                     />
                   </View>
              </View>

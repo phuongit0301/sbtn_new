@@ -1,65 +1,64 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, ListView, StyleSheet, TouchableHighlight } from 'react-native';
+import { Text, View, ScrollView, ListView, StyleSheet, TouchableHighlight, AsyncStorage } from 'react-native';
 import styles from '../../styles/Style';
 import Row from './Row';
 import AppView from '../general/App';
 
-let REQUEST_URL = 'https://ottapi.com/v1.7/sbtn/index/generateauthorization?key=0tt@pi.C0m_Med1@&token=cab9f50230778df5c52b4ccb4d12d6ca';
-let REQUEST_URL_MENU = 'https://ottapi.com/v1.7/sbtn/home/menu';
+import constants from '../../constants/Types';
+const {
+  REQUEST_MENU_URL
+} = constants;
 
 export default class MenuContentView extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true,
-      dataSource: new ListView.DataSource({
-        rowHasChanged: (row1, row2) => row1 !== row2
-      }),
+      isLoading: false,
+      authorization: {},
       dataMenuCategory: new ListView.DataSource({
         rowHasChanged: (row1, row2) => row1 !== row2,
         sectionHeaderHasChanged: (s1, s2) => s1 !== s2
       }),
-      dataMenuProvider: new ListView.DataSource({
-        rowHasChanged: (row1, row2) => row1 !== row2
-      })
+
     };
   }
   componentDidMount() {
-    this._generateAuthorization(REQUEST_URL);
+    this._generateAuthorization().done();
   }
 
-  _generateAuthorization(url) {
-    return fetch(url, { method: 'GET' })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this._fetchData(responseJson);
+  async _generateAuthorization(url) {
+    try {
+      let authorization = await AsyncStorage.getItem('authorizationGet');
+
+      this._fetchData(JSON.parse(authorization)).done();
+
+      this.setState({
+        authorization: JSON.parse(authorization)
       })
-      .catch((error) => {
-        console.error(error);
-      });
+    } catch(error) {
+      console.error(error);
+    }
   }
 
-  _fetchData(dataResponse) {
-    return fetch(REQUEST_URL_MENU, {
-      method: 'GET',
-      headers: {
-        'DateTime': dataResponse.DateTime,
-        'RequestToken': dataResponse.RequestToken,
-      },
-    })
-      .then((response) => response.json())
-      .then((responseData) => {
-        this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(responseData),
-          dataMenuCategory: this.state.dataSource.cloneWithRowsAndSections(responseData),
-          dataMenuProvider: this.state.dataSource.cloneWithRows(responseData),
-          isLoading: false
-        });
-      })
-      .catch((error) => {
-        console.error(error);
+  async _fetchData(authorization) {
+    try {
+      let response = await fetch(REQUEST_MENU_URL, {
+                                  method: 'GET',
+                                  headers: {
+                                    'DateTime': authorization.DateTime,
+                                    'RequestToken': authorization.RequestToken,
+                                  }
+                                });
+      let responseJson = await response.json();
+
+      //check if type is timelines
+      this.setState({
+        dataMenuCategory: this.state.dataMenuCategory.cloneWithRowsAndSections(responseJson)
       });
+    } catch(error) {
+      console.error(error);
+    }
   }
 
   renderMenuItem(menuItem) {

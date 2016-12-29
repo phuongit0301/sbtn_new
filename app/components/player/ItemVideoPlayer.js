@@ -190,7 +190,7 @@ export default class VideoPlayer extends Component {
                           name: 'SEARCH',
                           component: Search,
                           navigationBar: <NavigationBar title={this.renderLogoNavBar()} leftButton={this.renderNavIconMenu()}
-                          style={styles.navigationBar} />
+                                                        statusBar = {{ hidden: true }} style={styles.navigationBar} />
       })
   }
 
@@ -200,7 +200,7 @@ export default class VideoPlayer extends Component {
       name: 'LOGIN',
       component: Login,
       navigationBar: <NavigationBar title={this.renderLogoNavBar()} leftButton={this.renderNavIconMenu()}
-                                    rightButton={this.renderNavIconSearch()} style={styles.navigationBar}
+                                    statusBar = {{ hidden: true }} rightButton={this.renderNavIconSearch()} style={styles.navigationBar}
                      />
     });
   }

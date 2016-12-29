@@ -50,7 +50,7 @@ export default class NavigatorView extends Component {
   renderNavIconMenu() {
     return(
       <View style = {styles.NavIconMenu} >
-        <Icon name='menu' size={30} color='white' onPress={() => this.props.onMenuToogle()} />
+        <Icon name='menu' size={30} color='white' underlayColor='transparent' onPress={() => this.props.onMenuToogle()} />
       </View>
     )
   }
@@ -69,6 +69,7 @@ export default class NavigatorView extends Component {
           type='font-awesome'
           color='#fff'
           size={30}
+          underlayColor='transparent'
           onPress={() => this.navigator.jumpBack()} />
       </View>
     )
@@ -81,6 +82,7 @@ export default class NavigatorView extends Component {
           type='font-awesome'
           color='#fff'
           size={20}
+          underlayColor='transparent'
           onPress={() => this.bindOnPress()} />
       </View>
     )
@@ -89,10 +91,10 @@ export default class NavigatorView extends Component {
   bindOnPress() {
     this.navigator.push({
                           id: null,
-                          title: 'SEARCH',
+                          name: 'SEARCH',
                           component: Search,
-                          navigationBar: <NavigationBar title={this.renderLogoNavBar()} leftButton={this.renderBackButton()}
-                          style={styles.navigationBar} />
+                          navigationBar: <NavigationBar statusBar = {{ hidden: true }} title={this.renderLogoNavBar()} leftButton={this.renderBackButton()}
+                                          style={styles.navigationBar} />
       })
   }
 
@@ -126,6 +128,7 @@ export default class NavigatorView extends Component {
           component: AppView,
           passProps: {items: [], name: ''},
           navigationBar: <NavigationBar
+                statusBar = {{ hidden: true }}
                 style = {styles.navigationBar}
                 title = {this.renderLogoNavBar()}
                 leftButton = { this.renderNavIconMenu() }

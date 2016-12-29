@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import {Text, View, StyleSheet, Image, ListView, Dimensions, ScrollView, TouchableOpacity, ActivityIndicator} from 'react-native';
+import {Text, View, StyleSheet, Image, ListView, Dimensions, ScrollView, TouchableOpacity, ActivityIndicator, InteractionManager} from 'react-native';
 import DetailsCategory from '../categories/DetailsCategory';
 import Search from '../search/Search';
 import styles from '../../styles/Style';
@@ -30,7 +30,8 @@ export default class ListItem extends Component {
       this.state = ({
         dataList: null,
         width: 0,
-        imageLoading: true
+        imageLoading: true,
+        loading: true
       });
 
   }
@@ -80,17 +81,17 @@ export default class ListItem extends Component {
                           title: 'SEARCH',
                           component: Search,
                           navigationBar: <NavigationBar title={this.renderLogoNavBar()} leftButton={this.renderBackButton()}
-                          style={styles.navigationBar} />
+                                                        statusBar = {{ hidden: true }} style={styles.navigationBar} />
       })
   }
 
   componentDidMount() {
-    this.setState({
-      dataList: this.props.dataList,
-      imageSize: { width: width*3/4, height: (width*3/4) / 16*9 },
-      containerImageSize: { width: width*3/4, height: (width*3/4) / 16*9 },
-      width: width/2,
-    })
+    InteractionManager.runAfterInteractions(() => {
+      this.setState({
+        dataList: this.props.dataList,
+        loading: !this.state.loading
+      })
+    });
   }
 
   renderSectionHeader(key) {
@@ -119,7 +120,7 @@ export default class ListItem extends Component {
     return (
           <View style={styles.scrollArea}>
              <LazyloadScrollView
-                contentContainerStyle={[styles.content, {width: ((len*3/5) * (width - 5)) }]}
+                contentContainerStyle={[styles.content, {width: ((len*3/7) * (width - 5)) }]}
                 style={styles.scrollView}
                 horizontal={true}
                 name={"lazyload-home-"+key}
@@ -131,14 +132,15 @@ export default class ListItem extends Component {
                                                                                       id: data.id,
                                                                                       component: DetailsCategory,
                                                                                       navigationBar: <NavigationBar title={this.renderLogoNavBar()}
+                                                                                                        statusBar = {{ hidden: true }}
                                                                                                         leftButton = { this.renderBackButton() }
                                                                                                         style={styles.navigationBar}
                                                                                                         rightButton = { this.renderNavIconSearch() } />
                                                                                     })}>
-                      <View style={[{width: ((width*3/7) - 10), height: ((width*3/7) / 16 * 9), marginRight: 5, overflow: 'hidden'}]}>
+                      <View style={[{width: ((width*3/7) - 10), height: (((width*3/7) / 16 * 9) + 15), marginRight: 5, overflow: 'hidden'}]}>
                           <LazyloadImage
                               resizeMode="contain"
-                              style={[styles.centering, { width: undefined, height: undefined, flex: 1 }]}
+                              style={[styles.centering, { width: ((width*3/7) - 10), height: ((width*3/7) / 16 * 9), flex: 1 }]}
                               source={{uri: data.images[imageDevice]}}
                               onLoadEnd={(e) => this.setState({imageLoading: false})}
                               host={"lazyload-home-"+key}
@@ -162,7 +164,7 @@ export default class ListItem extends Component {
   render() {
     return (
       <View style={styles.scrollContainer}>
-        { this.state.dataList ? this.renderData(this.state.dataList) : null }
+        { this.state.dataList && this.renderData(this.state.dataList) }
       </View>
     );
   }

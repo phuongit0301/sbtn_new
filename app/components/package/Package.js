@@ -88,7 +88,7 @@ export default class PackageView extends Component {
                           title: 'SEARCH',
                           component: Search,
                           navigationBar: <NavigationBar title={this.renderLogoNavBar()} statusBar = {{ hidden: true }} leftButton={this.renderBackButton()}
-                          style={styles.navigationBar} />
+                                            statusBar = {{ hidden: true }} style={styles.navigationBar} />
       })
   }
 

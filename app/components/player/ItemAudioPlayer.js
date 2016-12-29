@@ -133,13 +133,14 @@ export default class ItemPlayer extends Component {
     const rowLive = this.props.dataAudio.isLive ? styles.rowBottom : styles.rowBottomNoLive;
 
     return (
-      <Animated.View style={[styles.container]}>
+      <Animated.View style={[styles.container]} shouldRasterizeIOS={true} renderToHardwareTextureAndroid={true}>
         <Image source={{uri: this.props.dataAudio.image}} style={{height: height}} blurRadius={40}>
            <View style={[styles.column, {flex: 1, alignItems: 'flex-start', justifyContent: 'flex-start'}]}>
              <View style={[styles.navigationBarAudio, styles.row]}>
                 { this.renderBackButton(this.props.dataAudio.mode) }
                 { this.renderLogoNavBar() }
              </View>
+
                <Video source={{uri: this.props.dataAudio.link}} // Looks for .mp4 file (background.mp4) in the given expansion version.
                   ref={(ref) => {
                     this.player = ref
@@ -232,7 +233,7 @@ export default class ItemPlayer extends Component {
                        type='font-awesome'
                        color='white'
                        size={16}
-                       containerStyle={styles.circle}
+                       containerStyle={styles.onBackward()}
                        onPress={() => this.changeLinkKaraoke(this.state.dataAudio.mp3_link)}
                      />
 
@@ -262,7 +263,7 @@ export default class ItemPlayer extends Component {
                      color='white'
                      size={16}
                      containerStyle={styles.circle}
-                     onPress={() => this.changeLinkKaraoke(this.state.dataAudio.mp3_link)}
+                     onPress={() => this.onForward(this.state.dataAudio.mp3_link)}
                    />
 
 

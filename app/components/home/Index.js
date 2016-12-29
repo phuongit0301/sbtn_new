@@ -10,7 +10,8 @@ import {
   ListView,
   Dimensions,
   ScrollView,
-  TouchableHighlight
+  TouchableHighlight,
+  ActivityIndicator
 } from 'react-native';
 
 import ImageSlider from 'react-native-image-slider';
@@ -67,7 +68,8 @@ export default class HomeView extends Component {
                                   headers: {
                                     'DateTime': authorization.DateTime,
                                     'RequestToken': authorization.RequestToken,
-                                  }
+                                  },
+                                  cache: 'default'
                                 });
       let responseData = await response.json();
 
@@ -93,7 +95,10 @@ export default class HomeView extends Component {
                 <ListItem dataList={this.state.listDataView} onCategoryItemSelected={this.props.onCategoryItemSelected} navigator={this.props.navigator} />
                 <ListItemListen dataList={this.state.listDataListen} onCategoryItemSelected={this.props.onCategoryItemSelected} navigator={this.props.navigator} />
               </ScrollView>
-            : null
+            :
+              <View style={[styles.centering, {flex: 1, flexDirection: 'column'}]}>
+                <ActivityIndicator animating={!this.state.loaded} size="small" />
+              </View>
           }
       </View>
    )

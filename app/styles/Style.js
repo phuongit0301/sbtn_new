@@ -49,7 +49,6 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#0099cc',
-    paddingTop: 20
   },
   menuUserView: {
     padding: 5,
@@ -189,7 +188,7 @@ export default StyleSheet.create({
     fontSize: 7,
     overflow: 'hidden',
     textAlign: 'center',
-    //paddingTop: 5
+    paddingTop: 5
   },
   contentContainer: {
     justifyContent: 'center',
@@ -615,7 +614,8 @@ export default StyleSheet.create({
     right: 0,
     justifyContent: 'center',
     alignSelf: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    height: 50
   },
   circleCloseButtonBottom: {
     paddingTop: 1,
